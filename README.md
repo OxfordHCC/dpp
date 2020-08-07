@@ -2,6 +2,7 @@
 
 Repo structure:
 
+```
 .
 ├── client
 │   ├── intro # demo page for dpp
@@ -10,3 +11,4 @@ Repo structure:
 ├── device-server 
 └── politeApps # polite app prototypes
     └── macos
+```
