@@ -1,9 +1,12 @@
-* DPP
-
-Work in progress
+# DPP - Work in progress
 
 Repo structure:
- - client
- - device-server
- - politeApps
 
+.
+├── client
+│   ├── intro # demo page for dpp
+│   ├── pTracker # Android wrapper
+│   └── web-react # web app
+├── device-server 
+└── politeApps # polite app prototypes
+    └── macos
