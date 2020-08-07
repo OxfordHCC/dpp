@@ -1,0 +1,67 @@
+#map-container{
+    height:100%;
+}
+
+.animated-path{
+    stroke-dashoffset: var(--pathLength);
+    stroke-dasharray: var(--pathLength);
+    animation: draw var(--time) ease-out forwards;
+}
+
+@keyframes draw{
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+#intro{
+    display: flex;
+    height:80vh;
+    width:360px;
+    height:640px;
+}
+
+#intro .content-inner{
+    display:flex;
+    flex-direction: column-reverse;
+    height:100%;
+    width:100%;
+    border:1px solid #E0E0E0;
+}
+
+#map-container{
+    flex:1;
+}
+
+#sidebar.expanded{
+    max-height:50%;
+    transition: max-height 0.25s ease-in;
+}
+
+#sidebar{
+    overflow-y: auto;
+    max-height:0px;
+    transition: max-height 0.15s ease-out;
+    box-shadow: 0px -2px 2px -1px #bdbdbd;
+    z-index:9999;
+}
+
+.smartphone-portrait {
+    padding: 55px 20px;
+    border-radius: 30px;
+    border: .5px solid #E0E0E0;
+    background-color: #FFF;
+    width: 40%;
+    /* float: left; */
+    box-shadow: inset 0px 0px 0px -4px rgba(255, 255, 255, 0.1), 1px 1px 6px rgba(0, 0, 0, 0.05), 1px 1px 8px rgba(0, 0, 0, 0.07);
+}
+
+
+/* @media (max-width: 600px){
+    .#intro{
+        flex-direction:column-reverse;
+    }
+    #sidebar{
+        max-height:50%;
+    }
+} */

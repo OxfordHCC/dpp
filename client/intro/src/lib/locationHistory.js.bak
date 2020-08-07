@@ -1,0 +1,118 @@
+import db from './store.js';
+
+const MAX_ACCURACY_RADIUS = 50; //discard entries that have accuracy of less than value in m
+
+const entryKeyFn = (pt) => `${pt.latitude}/${pt.longitude}`;
+const isAccurate = (pt) => pt.accuracy < MAX_ACCURACY_RADIUS;
+const tooSimilar = (pt, prev, next) => {
+	if(!prev || !next){
+		return false;
+	}
+	if(entryKeyFn(prev) !== entryKeyFn(pt)){
+		return false;
+	}
+	if(entryKeyFn(next) !== entryKeyFn(pt)){
+		return false;
+	}
+	return true;
+}
+
+let lastPosition;
+async function getLastPosition(){
+	return lastPosition || (await db.compressedHistory.limit(1).last());
+}
+window.getLastPosition = getLastPosition;
+async function updateLastPosition(pos){
+	lastPosition = pos;
+}
+
+function storeLastPos(pos){
+	db.compressedHistory.put(pos);
+	updateLastPosition(pos);
+}
+
+let sharedCompressionWorker;
+function getCompressionWorker(){
+	if(!sharedCompressionWorker){
+		sharedCompressionWorker = new Worker('../workers/compression.worker.js', {type: 'module'});
+	}
+	return sharedCompressionWorker;
+}
+
+async function put(pos){
+	let scWorker = getCompressionWorker();
+	let channel = new MessageChannel();
+	let lastPos = await getLastPosition();
+	if(!lastPos){
+		return storeLastPos(pos);
+	}
+
+	let inEntries = [lastPos, pos];
+	channel.port1.onmessage = msg => {
+		if(msg.data.event === 'done'){
+			let outEntries = msg.data.entries;
+			if(outEntries.length === 1){
+				//entries were compressed, so update the last entry
+				console.log('overwritting last position');
+				lastPos.latitude = outEntries[0].latitude;
+				lastPos.longitude = outEntries[0].longitude;
+				return storeLastPos(lastPos);
+			}
+			//the new entry is different enough to warrant a new, separate entry
+			storeLastPos(pos);
+		}
+	}
+
+	scWorker.postMessage({entries: inEntries, port: channel.port2}, [channel.port2]);
+}
+
+//TODO: rename to "simplify" (or smth else)
+function compressPoints(points){
+	if(!points || points.length === 0){ 
+		return; 
+	}
+
+	return new Promise((resolve, reject) => {
+		let scWorker = getCompressionWorker();
+		let channel = new MessageChannel();
+		let port1 = channel.port1;
+		port1.onmessage = msg => {
+			if(msg.data.event === 'done'){
+				resolve(msg.data.entries);
+				port1.close();
+			}
+		}
+		port1.onerrormessage = msg => reject(msg);	
+		scWorker.postMessage({entries: points, port: channel.port2}, [channel.port2]);
+	});
+}
+
+async function bulkPut(entries){
+	const compressed = [];
+	console.log('entries ', entries.length);
+
+	for(let i = 0, n = entries.length; i < n; i++){
+		let entry = entries[i];
+		if(isAccurate(entry) && !tooSimilar(entry, entries[i-1], entries[i+1])){
+			compressed.push(entry);
+		}
+	}
+
+	await db.compressedHistory.bulkPut(compressed);
+	return compressed.length;
+}
+
+function getLocationHistory(startMs, endMs){
+	return db.compressedHistory
+	.where('timestampMs')
+	.between(startMs, endMs)
+	.toArray()
+	.then(compressPoints);
+}
+
+export default {
+	getLocationHistory,
+	bulkPut,
+	put
+}
+

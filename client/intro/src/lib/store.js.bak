@@ -1,0 +1,18 @@
+//handle persistent data storage on the client side
+//!! Note that schema declarations only declare the primary keys.
+//	 So do NOT add every field you want to use. Only add the primary keys.
+import Dexie from 'dexie';
+
+const db = new Dexie('test');
+db.version(1).stores({
+    devices: `id, lat, long`,
+    locationHistory: 'timestampMs',
+    compressedHistory: 'timestampMs', //TODO: rename to filtered
+    meta: '++id, type'
+});
+
+db.version(2).stores({
+    mockDevices: '++id, lat, lon'
+});
+
+export default db;

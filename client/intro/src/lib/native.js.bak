@@ -1,0 +1,22 @@
+import AndroidInterface from "./native/android.js";
+import MockInterface from "./native/mock.js";
+import iOSInterface from "./native/ios.js";
+import WebInterface from './native/web.js';
+
+let nativeInterface;
+
+const android = window.Android;
+const ios = window.iOS;
+
+if(android){
+	nativeInterface = new AndroidInterface();
+}
+if(ios){
+	nativeInterface = new iOSInterface();
+}
+
+if(!nativeInterface){
+	nativeInterface = new WebInterface();
+}
+
+export default nativeInterface;

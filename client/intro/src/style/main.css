@@ -1,0 +1,55 @@
+#demo-section{
+    height: 100vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#demo-section .action-button{
+    font-size:20pt;
+    border: 0;
+    background-color:white;
+    border-radius:10px;
+    padding:20px;
+    box-shadow: 1px 1px 5px #979797;
+}
+#demo-section .action-button:active{
+    box-shadow: inset 0px 0px 0px 1px #979797;
+}
+
+#demo-section #button-row{
+    display:flex;
+    justify-content: space-around;
+}
+
+.action-button#try{
+    background-color:rebeccapurple;
+    color:white;
+}
+
+#demo-section .acrolet{
+    color:rebeccapurple;
+}
+#demo-section #title{
+    text-align: center;
+    font-size:20pt;
+}
+#demo-section .demo-container{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    flex: 1;
+}
+#demo-section .demo-instructions{
+    max-width:400px;
+    margin-left:40px;
+}
+#demo-section .demo-instructions h2{
+    font-size: 25pt;
+}
+#demo-section .demo-instructions p{
+    font-size: 15pt;
+}
+#demo-section #intro{
+    display:inline-block;
+}
