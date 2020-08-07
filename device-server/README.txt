@@ -2,7 +2,8 @@
 
 
 This is a simple server for:
-a) crowdosourced location0-bound devices*
+a) crowdosourced location-bound devices*
+b) proxying routing requests for the demo page to openrouteservice **
 
 
 = How to run:
@@ -13,25 +14,32 @@ a) crowdosourced location0-bound devices*
 
 2. create database**
 
-$> sqlite3 <path/to/db/file>
-$sqlite> .read ./db/createDb.sq
+   $> sqlite3 <path/to/db/file>
+   $sqlite> .read ./db/createDb.sq
 
+3. Create config file
 
-3. Start server
+   $> cp config.js.sample config.js
+   $> cat config.js
+   
+4. Start server
 
-$> node index
-listening on port 3000
+   $> node index
+   listening on port 3000
 
 
 
 = Notes
 
 * Database foundation fetched from the osmcamera project
-(https://github.com/khris78/osmcamera)
+  (https://github.com/khris78/osmcamera)
 
-** Make sure you're running the correct sqlite3 binary:
+** if you plan to use the demo page, make sure to replace the
+   openrouteservice key in config.js
 
-$> which sqlite3.
+*** Make sure you're running the correct sqlite3 binary:
+
+	$> which sqlite3.
 
 Should print /usr/bin/sqlite3 or equivalent. If you've added the
 android sdk to your path, that might get called instead. They're both
