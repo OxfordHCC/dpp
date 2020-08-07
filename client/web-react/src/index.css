@@ -1,0 +1,59 @@
+@import url("~leaflet/dist/leaflet.css");
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root{
+	display:flex;
+	flex-direction:column;
+	height:100vh;
+}
+.page{
+	flex:1;
+}
+
+.menu{
+	
+}
+
+@font-face{
+	font-family: 'Material Icons';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Material Icons'),
+	local('MaterialIcons-Regular'),
+	url("~material-design-icons/iconfont/MaterialIcons-Regular.woff2") format("woff2"),
+	url("~material-design-icons/iconfont/MaterialIcons-Regular.woff") format("woff"),
+	url("~material-design-icons/iconfont/MaterialIcons-Regular.ttf") format("truetype");
+}
+
+.m-i{
+	font-family: 'Material Icons';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	display:inline-block;
+	line-height: 1;
+	text-transform: none;
+	letter-spacing: normal;
+	word-wrap: normal;
+	white-space: nowrap;
+	direction: ltr;
+	-webkit-font-smoothing: antialiased;
+	text-rendering:optimizeLegibility;
+	-moz-osx-font-smoothing: grayscale;
+	font-feature-settings: 'liga';
+}
+
+

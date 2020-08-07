@@ -1,0 +1,44 @@
+.intersection-card{
+    min-width:200px;
+    box-shadow: 1px 1px 3px 0px gray;
+    margin:10px;
+    border-radius:10px;
+}
+.intersection-card .title{
+    font-weight:bold;
+    
+}
+
+.intersection-card .controller-list{
+}
+
+.intersection-card .details{
+    max-height:0;
+    transition: max-height 0.15s ease-out;
+    overflow:hidden;
+}
+
+.intersection-card .details.expanded{
+    max-height:600px;
+    transition: max-height 0.25s ease-in;
+}
+
+.intersection-card .inner{
+    padding:10px;
+}
+
+.intersection-card .bottom{
+    text-align: right;
+}
+
+.intersection-card .manifest-details{
+    margin-left:20px;
+}
+
+.intersection-card .provenance{
+    color: grey;
+}
+
+.Pane{
+    margin-left:20px;
+}
