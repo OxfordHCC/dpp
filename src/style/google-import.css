@@ -1,0 +1,7 @@
+
+#google-import #import-log {
+        height: 300px; 
+        overflow: scroll; 
+        background-color: lightgrey; 
+        font-family: Lucida Console, Courier, monospace;
+}

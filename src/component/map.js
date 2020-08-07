@@ -1,43 +1,57 @@
 import React from 'react';
 import L from 'leaflet';
 
+window.L = L;
 
 export default class Map extends React.Component{
     constructor(props){
         super(props);
+
         this.state = {
-            latitude: props.latitude,
-            longitude: props.longitude
+            center: this.getCenter(props)
         }
     }
 
-    drawPath(points, options){
-        points = points.filter(x => x !== undefined);
-        const line = L.polyline(points, options).addTo(this.mapElem);
-        const path = line._path;
-        const pathLen = path.getTotalLength();
+    getCenter(props){
+        if(props.bounds && props.bounds.length === 2){
+            return L.latLngBounds(props.bounds).getCenter();
+        }
+        if(props.latitude && props.longitude){
+            return [props.latitude, props.longitude];
+        }
+
+        return [51.7526234,-1.2699446];
+    }
+
+	//the weird stlye properties are there to reset the css props after it's done animating
+    drawPath(path){
+        const points = path.points.filter(x => x !== undefined);
+        const line = L.polyline(points, path.options).addTo(this.userLayer);
+        const _path = line._path;
+        const pathLen = _path.getTotalLength();
         const pxSecSpeed = 1000/1; //1000px/s;
         const time = pathLen / pxSecSpeed;
-        path.style.setProperty('--pathLength', pathLen);
-        path.style.setProperty('--time', `${time}s`);
+        _path.style.setProperty('--pathLength', pathLen);
+        _path.style.setProperty('--time', `${time}s`);
         setTimeout(() => {
-            path.style.setProperty('stroke-dasharray', 0);
+            _path.style.setProperty('stroke-dasharray', 0);
         },time+100);
     }
 
     drawCircle({point, options}){
-        const circle = L.circle(point, options).addTo(this.mapElem);
+        return L.circle(point, options).addTo(this.userLayer);
     }
 
     drawMarker({point, options}){
-        const marker = L.marker(point, options).addTo(this.mapElem);
+        return L.marker(point, options).addTo(this.userLayer);
     }
 
     componentDidUpdate(prevProps){
+        this.userLayer.clearLayers();
         //for each path, draw path
         if(this.props.paths){
             this.props.paths.filter(x => x !== undefined)
-                .forEach(path => this.drawPath(path.data, path.options));
+                .forEach(path => this.drawPath(path));
         }
         if(this.props.markers){
             this.props.markers.filter(x => x !== undefined)
@@ -47,18 +61,29 @@ export default class Map extends React.Component{
             this.props.circles.filter(x => x !== undefined)
                 .forEach(x => this.drawCircle(x));
         }
+		if(this.props !== prevProps){
+			this.center = this.getCenter(this.props);
+			this.zoom = (this.props.bounds && this.props.bounds.length===2 && this.mapElem.getBoundsZoom(this.props.bounds)) || 16;
+			this.mapElem.flyTo(this.center, this.zoom);
+		}
+       
+		if(this.state.longPressMenu){
+			
+			console.log('should show long press menu');
+		}
     }
 
     componentDidMount(){
+		
         const longPress = {
             timeout: null,
-            threshold: 1500
+            threshold: 300
         };
 
-        this.mapElem = L.map('map',{
+        this.mapElem = L.map('map', {
             zoomControl: false,
             attributionControl: false,
-            center: [this.state.latitude, this.state.longitude],
+            center: this.state.center,
             zoom: 16,
             layers:[
                 L.tileLayer(`https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png`,{
@@ -66,6 +91,7 @@ export default class Map extends React.Component{
                 })
             ]
         });
+        
         this.mapElem.on('mouseup', (evt) => {
             clearTimeout(longPress.timeout);
             if(this.props.onMouseUp && typeof this.props.onMouseUp === 'function'){
@@ -77,12 +103,20 @@ export default class Map extends React.Component{
                 }
             }
         });
+
+		const onLongPress = (coord) => () => {
+			console.log('long press', coord);
+			this.setState({
+				longPressMenu: {
+					
+				}
+			})
+			navigator.vibrate(30);
+		}
         
         this.mapElem.on('mousedown', (evt) => {
             this.moved = false;
-            longPress.timeout = setTimeout(() => {
-                console.log('long press');
-            }, longPress.threshold);
+            longPress.timeout = setTimeout(onLongPress(evt.latlng), longPress.threshold);
             if(this.props.onMouseDown && typeof this.props.onMouseDown === 'function'){
                 this.props.onMouseDown(evt);
             }
@@ -92,9 +126,11 @@ export default class Map extends React.Component{
             this.moved = true;
             clearTimeout(longPress.timeout);
         });
+
+        this.userLayer = L.layerGroup().addTo(this.mapElem);
     }
 
     render(){
-        return <div id="map" style={{height:"100%"}}></div>
+        return <div className="map" id="map" ></div>
     }
 }

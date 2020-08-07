@@ -1,3 +1,6 @@
+// This file is loaded by creat-react-app before running tests.
+//See https://create-react-app.dev/docs/running-tests/#initializing-test-environment
+
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)

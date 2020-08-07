@@ -1,0 +1,63 @@
+
+.history.page{
+    display: flex;
+    overflow: hidden;
+
+    .vertical-scroll-container{
+        display:flex;
+		flex-direction:column;
+        overflow:hidden;
+    }
+	
+    .fill{
+        flex: 1;
+    }
+    
+    .sidebar{
+		min-width: 300px;
+        .history-nav{
+            .intersection-list{
+				.filters{
+					margin: 5px 10px;
+				}
+                .cards{
+					border-top:1px solid #e8e8e8;
+					border-bottom: 1px solid #e8e8e8;
+                    overflow: auto;
+                }
+            }
+			.controls{
+				margin:10px 0;
+				display: flex;
+				justify-content: space-around;
+				align-items:center;
+			
+			}
+        }
+    }
+    #map{
+        flex:1
+    }
+}
+
+@media(max-width: 700px){
+    .history.page{
+        flex-direction: column-reverse;
+		.vertical-scroll-container{
+			display:flex;
+			flex-direction:column-reverse;
+		}
+		.sidebar{
+			min-width:100%;
+			max-height:50vh;
+			.history-nav{
+				.intersection-list{
+					.cards{
+						//max-height:0vh;
+					}
+				}
+			}
+		}
+    }
+
+}

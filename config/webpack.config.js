@@ -24,6 +24,7 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+const WorkerPlugin = require('worker-plugin');
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -40,6 +41,8 @@ const isExtendingEslintConfig = process.env.EXTEND_ESLINT === 'true';
 const imageInlineSizeLimit = parseInt(
   process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
 );
+
+const isDebugging = process.env.DPP_DEBUG === "true";
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -194,7 +197,7 @@ module.exports = function(webpackEnv) {
       globalObject: 'this',
     },
     optimization: {
-      minimize: isEnvProduction,
+      minimize: isEnvProduction && !isDebugging,
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
@@ -288,7 +291,8 @@ module.exports = function(webpackEnv) {
       extensions: paths.moduleFileExtensions
         .map(ext => `.${ext}`)
         .filter(ext => useTypeScript || !ext.includes('ts')),
-      alias: {
+		alias: {
+			"src_root": path.resolve(__dirname, 'src/'),
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
@@ -485,6 +489,20 @@ module.exports = function(webpackEnv) {
                 'sass-loader'
               ),
             },
+            {
+                test: /\.less$/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'less-loader'
+                    }
+                ]
+            },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.
@@ -508,6 +526,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new WorkerPlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -516,7 +535,7 @@ module.exports = function(webpackEnv) {
             inject: true,
             template: paths.appHtml,
           },
-          isEnvProduction
+          isEnvProduction && !isDebugging
             ? {
                 minify: {
                   removeComments: true,
