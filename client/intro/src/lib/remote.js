@@ -1,6 +1,5 @@
-//const HOST = 'https://192.168.43.33';
-const HOST = 'http://zoleqo2ruklreslvdeagmjbphuuxop4oxykwb7cifoga75r3xxiorsqd.onion'
-const PORT = '80';
+const HOST = 'http://localhost';
+const PORT = '3000';
 
 const defaultHeaders = {
 	'Content-Type': 'application/json'

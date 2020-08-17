@@ -92,12 +92,12 @@ export function distanceLatLongPythagora(a, b){
 }
 
 //https://www.movable-type.co.uk/scripts/latlong.html
-export function distanceLatLongHaversine(a, b){
+export function distanceLatLongHaversine(A, B){
 	var R = 6371e3;
-	var φ1 = a.latitude * (Math.PI/180);
-	var φ2 = b.latitude * (Math.PI/180);
-	var Δφ = (b.latitude-a.latitude) * (Math.PI/180);
-	var Δλ = (b.longitude-a.longitude) * (Math.PI/180);
+	var φ1 = A.latitude * (Math.PI/180);
+	var φ2 = B.latitude * (Math.PI/180);
+	var Δφ = (B.latitude-A.latitude) * (Math.PI/180);
+	var Δλ = (B.longitude-A.longitude) * (Math.PI/180);
 
 	var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
 			Math.cos(φ1) * Math.cos(φ2) *

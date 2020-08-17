@@ -1,10 +1,4 @@
 import db from './store';
-import location from './location';
-import openroute from './openroute';
-import device from './devices';
-import L from 'leaflet';
-
-const IX_VALID_EDGE = 'intersection-valid-edge-left';
 
 //get currently active intersections
 //active intersections are intersections 

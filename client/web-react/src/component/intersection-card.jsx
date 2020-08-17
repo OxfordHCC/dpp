@@ -1,6 +1,6 @@
 import React from 'react';
 //import '../style/intersection-card.css';
-import { Card, Button, Checkbox } from 'semantic-ui-react';
+import { Card, Checkbox } from 'semantic-ui-react';
 import { useState } from 'react';
 
 

@@ -15,7 +15,7 @@ b) proxying routing requests for the demo page to openrouteservice **
 2. create database**
 
    $> sqlite3 <path/to/db/file>
-   $sqlite> .read ./db/createDb.sq
+   $sqlite> .read ./db/createDb.sql
 
 3. Create config file
 

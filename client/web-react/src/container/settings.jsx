@@ -1,7 +1,6 @@
 import React from 'react';
 import GoogleLocationImport from './google-import';
 import ApiKeysPage from './apiKeys';
-import credentials from '../lib/credentials';
 import DetectionServiceList from './detectionServiceList';
 import { connect } from 'react-redux';
 import { ButtonItem, MenuGroup, Section } from '@atlaskit/menu';
@@ -107,7 +106,7 @@ const Settings = (params) => {
               <Section title="">
                 <p>A short description of the DPP project.<a href="#">More details</a></p>
                 <a href="#">Privacy Policy</a>
-                <p>Illustrations by <a href="https://icons8.com">8Icons</a></p>
+                <p>Illustrations by <a href="https://icons8.com">icons8</a></p>
               </Section>
             </MenuGroup>
             <div id="settings-page-root">

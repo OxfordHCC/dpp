@@ -1,8 +1,4 @@
 import {
-	Evented,
-	groupBy,
-	chunk,
-	flatten,
 	last
 } from '../util.js';
 import location from '../location.js';
@@ -63,10 +59,6 @@ async function locationUpdate(events){
 
 function handleUDP(events){
 	return udp.handleEvents(events);
-}
-
-function defaultEventHandler(event){
-	console.log('no event handler found for event of type', event.type);
 }
 
 export function handleEvents(data, handlers){

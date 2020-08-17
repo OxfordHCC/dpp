@@ -13,50 +13,36 @@ const GoogleImport = () => {
 
     const [progress, setProgress] = React.useState('');
     const [details, setDetails] = React.useState({});
-    const [log, setLog] = React.useState([]);
 
     const state = {
         stopImport: false
     }; 
     React.useEffect(() => {
-        console.log('called use effect');
         fileInput.current.onchange = (evt) => {
             const file = evt.target.files[0];
             importHistory(file, state, {
                 onClose: () => {
-                    console.log('on close called');
-                    // importDetailsSpan.current.textContent = '';
-                    // importProgressSpan.current.textContent = "Stopped!";
-                    //setProgress(0);
                     evt.target.value = null;
                 },
                 onLog: (str) => {
-                    // let line = document.createElement('div');
-                    // line.textContent = `${Date.now()} > ${str}`;
-                    // importLog.current.appendChild(line);
+                    //TODO: log
                 },
                 onReadChunk: (chunkIndex) => {
-                    // importProgressSpan.current.textContent = `Reading chunk ${chunkCount}`;
                     setProgress(chunkIndex / details.chunkLen);
-                    console.log('details is ', details)
                     setDetails({
                         ...details,
                         chunkIndex
                     });
                 },
                 onStart: (chunkSize) => {
-                    // importLog.current.innerHTML = "";
-                    console.log('Started import...', file.size, chunkSize);
                     const fileSize = file.size;
                     let chunkLen = Math.ceil(fileSize / chunkSize);
-                    console.log('chunkLen', chunkLen);
                     setDetails({
                         fileSize,
                         chunkSize,
                         chunkLen,
                         chunkIndex: 0
                     });
-                    console.log('details is ', details);
                 }
             });
         };
@@ -64,7 +50,6 @@ const GoogleImport = () => {
 
 
     const stopImport = () => {
-        console.log('clicked stopImport');
         state.stopImport = true;
     };
 
@@ -162,7 +147,7 @@ function importHistory(file, state, listeners){
 		}else{
 			listeners && listeners.onClose && listeners.onClose();
 		}
-	}
+	};
 
 	//TODO: if the entries in the tail were duplicates,
 	//the head of the next chunk may continue the series
@@ -186,7 +171,7 @@ function importHistory(file, state, listeners){
 			console.error(err);
 			reader.abort();
 			printTail(buffer.length-1, buffer);
-			return Promise.reject(err);
+            printHead(0, buffer);
 		}
 	}
 
@@ -202,7 +187,7 @@ function importHistory(file, state, listeners){
 	listeners && listeners.onStart && listeners.onStart(CHUNK_SIZE);
 }
 
-//DEBUGGING FNs
+//DEBUGGING functions
 function printSlice(slice){
 	console.log(new TextDecoder('utf-8').decode(slice));
 }

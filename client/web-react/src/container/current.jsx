@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CurrentIntersections from '../component/current-intersections';
-import RecentIntersections from '../component/recent-intersections';
 import searchIll from '../images/clip/clip-2.png';
 import { Header } from 'semantic-ui-react';
 
@@ -26,6 +25,7 @@ const Current = ({ currentIntersections }) => {
                 })}>
                   
                   <img
+                    alt="no-intersections"
                     style={({
                         maxWidth:"960px",
                         width:"100%"

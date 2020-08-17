@@ -13,7 +13,7 @@ export const setList = (list) => ({
 	list
 });
 
-export const toggle = (service) => async (dispatch, getState) =>  {
+export const toggle = (service) => async (dispatch, getState) => {
 	//call native, get reply and update_status with reply
 	const { status } = await native.settings.toggleService(service);
 	dispatch(updateStatus(service, status));

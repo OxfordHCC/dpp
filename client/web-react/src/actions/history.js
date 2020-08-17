@@ -1,5 +1,3 @@
-import intersection from "../lib/intersection";
-import location from '../lib/location';
 import { showErrorTemp } from "./error";
 import historyLib from "../lib/history";
 

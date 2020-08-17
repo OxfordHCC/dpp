@@ -44,7 +44,6 @@ const locationService = (webInterface) => {
 		},{
 			enableHighAccuracy: true
 		});
-		
 	}
 
 	function stop(){
@@ -75,12 +74,14 @@ const locationService = (webInterface) => {
 }
 
 const theWeb  = (webInterface) => {
+	
 	const detectionServices = {
 		location: locationService(webInterface)
 	};
 	
 	function toggleDetectionService({ id }){
-		return detectionServices[id].toggle();
+		const status = detectionServices[id].toggle();
+		return { status };
 	}
 	
 	function receiveMessage(message){

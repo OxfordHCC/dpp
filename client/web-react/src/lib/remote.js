@@ -1,7 +1,8 @@
 import { LatLngToLatLon } from './location';
 
+
 //const HOST = 'http://10.0.0.1';
-const HOST = 'http://10.0.2.2';
+const HOST = 'http://localhost';
 const PORT = '3000';
 
 const defaultHeaders = {
@@ -60,6 +61,7 @@ function POST(endpoint, body, opts){
 	return api(endpoint, {...opts, method:'POST', body: JSON.stringify(body)});
 }
 
+/* unused
 function DELETE(endpoint, body, opts){
 	return api(endpoint, {...opts, method:'DELETE', body: JSON.stringify(body)});
 }
@@ -67,6 +69,7 @@ function DELETE(endpoint, body, opts){
 function PUT(endpoint, body, opts){
 	return api(endpoint, {...opts, method:'PUT', body: JSON.stringify(body)});
 }
+*/
 
 export default {
 	deprecated_getMarkers,
