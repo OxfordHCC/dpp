@@ -2,9 +2,10 @@ import React from 'react';
 import { Unique } from '../lib/util';
 import IntersectionCard from './intersection-card';
 import { Label } from 'semantic-ui-react';
+import { classObj } from '../lib/util';
 import '../style/intersection-list.css';
 
-const IntersectionList = ({ intersections, withControls }) => {
+const IntersectionList = ({ intersections, withControls, collapsed }) => {
     const categories = intersections
           .filter(Unique('detectionType'))
           .map(x => x.detectionType);
@@ -31,7 +32,13 @@ const IntersectionList = ({ intersections, withControls }) => {
     };
     
     return (
-        <div className="intersection-list vertical-scroll-container">
+        <div
+          className="intersection-list vertical-scroll-container"
+          style={
+              {
+                  ...(collapsed? {"height": 0} : null)
+              }
+          }>
           {
               (categories.length > 1)?
                   <div className="filters">

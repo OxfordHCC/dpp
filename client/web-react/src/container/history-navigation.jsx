@@ -1,12 +1,14 @@
 import React from 'react';
 import IntersectionList from '../component/intersection-list';
-import { Button, Header } from 'semantic-ui-react'; 
+import { Button, Header } from 'semantic-ui-react';
+
 
 const HistoryNavigation = ({ intersections, date }) => {
     const dateFormat = { month: 'long', day: 'numeric' };
     const selectedDate = new Date(date);
     const selectedDateString = selectedDate.toLocaleString('en-GB', dateFormat);
     const urlDate = date => new Date(date).toISOString().split('T')[0];
+    const [listHidden, setListHidden] = React.useState(false);
     
     const nextDay = () => {
         const newDate = new Date(selectedDate);
@@ -29,17 +31,32 @@ const HistoryNavigation = ({ intersections, date }) => {
               onClick={() => prevDay()}
             />
             <Header>{selectedDateString}</Header>
-
             <Button
               primary
               icon='right chevron'
               onClick={() => nextDay()}
               />
           </div>
-          <IntersectionList intersections={intersections}></IntersectionList>
+          
+          <IntersectionList
+            intersections={intersections}
+            collapsed={listHidden}
+          />
+          {
+              (intersections.length > 1)?
+                  <div className="collapse-button-container">
+                    {
+                        listHidden?
+                        <Button attached="top" fluid onClick={() => setListHidden(false)}>Show list</Button>
+                        : <Button attached="top" fluid onClick={() => setListHidden(true)}>Hide list</Button>
+                    } 
+                    
+                  </div>
+              : <span/>
+          }
         </div>
     );
-}
+};
 
 
 export default HistoryNavigation;

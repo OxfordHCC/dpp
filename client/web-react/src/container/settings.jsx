@@ -9,6 +9,7 @@ import '../style/settings.less';
 import { Header } from 'semantic-ui-react';
 import ExportPage from './export-page';
 import ImportPage from './import-page';
+import { classObj } from '../lib/util';
 
 const NoPage = () => {
     return(
@@ -32,10 +33,6 @@ const NoPage = () => {
     );
 };
 
-const classObj = (style) => Object.entries(style)
-    .filter(([k,v]) => v)
-    .map(([k, v]) => k)
-    .join(' ');
 
 export const FakeButton = props => {
     const styleFn = currentStyles => ({

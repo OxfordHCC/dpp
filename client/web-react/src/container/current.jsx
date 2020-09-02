@@ -12,7 +12,7 @@ import { Header } from 'semantic-ui-react';
 
 const Current = ({ currentIntersections }) => {    
 
-    const Content = () =>{
+    const Content = () => {
         if(currentIntersections.length === 0){
             return (
                 <div style={({
@@ -35,6 +35,7 @@ const Current = ({ currentIntersections }) => {
                 </div>
             );
         }
+        
         return  <CurrentIntersections intersections={currentIntersections} withControls={true}/>;
     };
     
@@ -42,7 +43,7 @@ const Current = ({ currentIntersections }) => {
 		<div className="main page"
              style={({
                  overflow:"hidden",
-                 "overflow-y":"auto"
+                 "overflowY":"auto"
              })}
         >
           {Content()}

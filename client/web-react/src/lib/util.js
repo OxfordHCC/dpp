@@ -1,16 +1,23 @@
-/*
-  Documentation
 
-  
-  groupBy
+//helper function for assigning classes on react components
+/*Example usage (settings.jsx)
+<a id="back-button" href="#settings" onClick={hidePage}
+   className={classObj({
+	   "back-link": true,
+	   "hidden": subtitle === null
+   })}>
 
-  chunk(n, arr?) => [] | fn
-  flatten(arr) => []
-  groupBy(key, arr?) => {} | fn
-  pluck(indeces, arr) => []
-  Evented
-  uuidv4 - generate uuidv4 (conforms to ISOsomething(4.4))
+  <i className="m-i">navigate_before</i>
+  Back
+
+</a>
 */
+export function classObj(style){
+	return Object.entries(style)
+		.filter(([k,v]) => v)
+		.map(([k, v]) => k)
+		.join(' ');
+}
 
 function noopTag(t) {
 	for (var o = [t[0]], i = 1, l = arguments.length; i < l; i++){
