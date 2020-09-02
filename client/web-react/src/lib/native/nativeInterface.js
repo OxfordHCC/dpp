@@ -9,8 +9,12 @@ import openroute from '../openroute';
 import { UDP_ENTER, UDP_EXIT } from '../udp';
 import { store } from '../../index.jsx';
 import { refreshCurrent } from '../../actions/current.js';
+
 export const LOCATION_UPDATE = "LOCATION_UPDATE";
 export const WEBVIEW_READY = "WEBVIEW_READY";
+export const SYNC_UDP = 'sync_udp';
+export const TOGGLE_DETECTION_SERVICE = 'toggle_detection_service';
+export const GET_DETECTION_SERVICES = 'get_detection_services';
 
 const eventHandlers = {
 	[LOCATION_UPDATE]: locationUpdate,
@@ -33,15 +37,16 @@ async function locationUpdate(events){
 	try{
 		const latestEvent = last(locations);
 		const openroutes = await openroute.estimatePath([lastLocation, ...locations]);
-		console.log('shouldn\'t get here');
 		const deviceBounds = location.getBoundsArray(openroutes, { pad: 0.1, min: 500 });
 		const devices = await device.getAround(deviceBounds);
+
 		const newIntersections = (await location.computeIntersections(openroutes, devices))
 			  .map(inx => ({ //mark intersections computed using last location as open
 				  ...inx,
 				  endMs: (inx.path[1].timestamp === latestEvent.timestamp)? -1 : inx.endMs
 			  }));
-		
+
+		//old intersections are marked as closed
 		const oldIntersections = (await intersection.getCurrent())
 			  .filter(inx => inx.detectionType === "geolocation")
 			  .map(inx => ({
@@ -89,19 +94,22 @@ function handleMessage({ type, data }){
 }
 
 const nativeInterface = native => {
-	const sendMessage = (type, data) => native.send({type, data});
+	const sendMessage = (type, data) => native.send({ type, data });
 	native.setMessageHandler(handleMessage);
 	sendMessage(WEBVIEW_READY);
 
 	return {
-		test: () => sendMessage('test'),
-		getServices: () => sendMessage("get_detection_services"),
+		getServices: () => sendMessage(GET_DETECTION_SERVICES),
 		settings: {
-			toggleService: id => sendMessage("toggle_detection_service", { id })
+			toggleService: id => sendMessage(TOGGLE_DETECTION_SERVICE, { id })
 		},
-		syncUDP: (entries) => sendMessage('sync_udp', { entries })
+		syncUDP: (entries) => sendMessage(SYNC_UDP, { entries })
 	}
 }
 
 
 export default nativeInterface;
+
+
+
+

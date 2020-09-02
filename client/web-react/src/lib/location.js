@@ -113,7 +113,7 @@ async function bulkPut(entries){
 
 //leaflet uses 3 (THREE) different _mostly_ interchangeable formats for coordinates: {lat, lon}, {lat, lng} and [lat, lon]
 //something else that I can't seem to recall rn uses a 4th format (the [lon,lat])
-//while our indexeded db uses a 5th format ({latitude, longitude}) because... it was created before I realised the disaster.
+//while our indexeded db uses a 5th format ({ latitude, longitude }) because... it was created before I realised the disaster.
 //Basically it's hell. I keep refactoring these, but I always end up with more than I wish for. At some point will do it properly, but it will require changes across multiple platforms and so I keep deferring it.
 export const objToLonLat = ({ longitude, latitude }) => ([ longitude, latitude ]);
 export const objToLatLon = ({ longitude, latitude }) => ([ latitude, longitude ]);

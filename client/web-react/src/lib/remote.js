@@ -1,7 +1,7 @@
 import { LatLngToLatLon } from './location';
 
 
-//const HOST = 'http://10.0.0.1';
+//const HOST = 'http://10.0.2.2';
 const HOST = 'http://localhost';
 const PORT = '3000';
 
@@ -42,6 +42,7 @@ async function getDevicesBounded([min, max]){
     }
     return res.results;
 }
+
 
 function appendDefaultHeaders(headers){
 	return Object.assign({}, defaultHeaders, headers);

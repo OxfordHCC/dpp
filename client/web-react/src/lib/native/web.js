@@ -92,7 +92,9 @@ const theWeb  = (webInterface) => {
 		if(type === "get_detection_services"){
 			return getServices();
 		}
-		return Promise.reject({error: `Undefined message type '${message.type}'` });
+
+		
+		//return Promise.reject({error: `Undefined message type '${message.type}'` });
 	}
 
 	function getServices(){

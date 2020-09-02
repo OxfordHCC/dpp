@@ -32,11 +32,16 @@ const IntersectionList = ({ intersections, withControls }) => {
     
     return (
         <div className="intersection-list vertical-scroll-container">
-          <div className="filters">
-            <Label.Group>
-              { Filters() }
-            </Label.Group>
-          </div>
+          {
+              (categories.length > 1)?
+                  <div className="filters">
+                    <Label.Group>
+                      { Filters() }
+                    </Label.Group>
+                  </div>
+              : <span></span>
+          }
+          
           <div className="cards" style={({
               padding:"5px"
           })}>

@@ -42,12 +42,35 @@ function MockInterface(webInterface){
 		};
 	}
 
-	function location(loc){
+	function parseStrLocation(loc){
+		const coordArr = loc.split(',').map(x => x.trim())
+		return {
+			'latitude': coordArr[0],
+			'longitude': coordArr[1]
+		}
+	}
+
+	function parseLatlngLocation(loc){
+		return {
+			'latitude': loc['lat'],
+			'longitude': loc['lng']
+		}
+	}
+
+	function location(loc, accuracy=5){
+		if(typeof loc === 'string'){
+			loc = parseStrLocation(loc)
+		}
+
+		if(loc['lat'] && loc['lng']){
+			loc = parseLatlngLocation(loc)
+		}
+		
 		return {
 			type: LOCATION_UPDATE,
 			timestamp: (new Date()).toISOString(),
-			data:{
-				accuracy: 5,
+			data: {
+				accuracy,
 				...loc
 			}
 		};

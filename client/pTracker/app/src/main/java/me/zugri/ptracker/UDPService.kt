@@ -15,6 +15,7 @@ import java.net.InetSocketAddress
 
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
+import java.net.NetworkInterface
 
 
 //UDP service for detecting devices using UDP.
@@ -178,6 +179,7 @@ class UDPService : DetectionService() {
             s.reuseAddress = true
             s.broadcast = true
             s.receiveBufferSize = 100
+
             s.bind(InetSocketAddress("0.0.0.0",PORT))
             while(status){
                 Lumber.log("UDP service: waiting for udp packet...")

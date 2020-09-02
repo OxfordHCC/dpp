@@ -1,7 +1,20 @@
 import React from 'react';
 import L from 'leaflet';
+import { renderToString } from 'react-dom/server';
+import { Button } from 'semantic-ui-react';
+import ReactDOM from 'react-dom';
 
-window.L = L;
+
+const PopupContent = ({ latlng }) => {
+	
+	return (
+		<div>
+		  <Button primary onClick={() => console.log('aaa')}>
+            Mock location
+          </Button>
+		</div>
+	);
+};
 
 export default class Map extends React.Component{
     constructor(props){
@@ -9,7 +22,7 @@ export default class Map extends React.Component{
 
         this.state = {
             center: this.getCenter(props)
-        }
+        };
     }
 
     getCenter(props){
@@ -48,28 +61,38 @@ export default class Map extends React.Component{
 
     componentDidUpdate(prevProps){
         this.userLayer.clearLayers();
+		
         //for each path, draw path
         if(this.props.paths){
             this.props.paths.filter(x => x !== undefined)
                 .forEach(path => this.drawPath(path));
         }
+		
         if(this.props.markers){
             this.props.markers.filter(x => x !== undefined)
                 .forEach(x => this.drawMarker(x));
         }
+		
         if(this.props.circles){
             this.props.circles.filter(x => x !== undefined)
                 .forEach(x => this.drawCircle(x));
         }
+		
 		if(this.props !== prevProps){
 			this.center = this.getCenter(this.props);
 			this.zoom = (this.props.bounds && this.props.bounds.length===2 && this.mapElem.getBoundsZoom(this.props.bounds)) || 16;
 			this.mapElem.flyTo(this.center, this.zoom);
 		}
-       
+
 		if(this.state.longPressMenu){
-			
-			console.log('should show long press menu');
+			// const latlng = this.state.longPressMenu.latlng;
+			// const content = PopupContent(latlng);
+            // const rootDiv = document.createElement('div');
+            // ReactDOM.render(content, rootDiv);
+			// const popup = L.popup({ closeOnClick: false })
+			// 	  .setLatLng(latlng)
+			// 	  .setContent(rootDiv)
+			// 	  .openOn(this.mapElem);
 		}
     }
 
@@ -104,15 +127,15 @@ export default class Map extends React.Component{
             }
         });
 
-		const onLongPress = (coord) => () => {
-			console.log('long press', coord);
+		const onLongPress = (latlng) => () => {
+			console.log('long press', latlng);
+			
 			this.setState({
-				longPressMenu: {
-					
-				}
-			})
+				longPressMenu: { latlng	}
+			});
+			
 			navigator.vibrate(30);
-		}
+		};
         
         this.mapElem.on('mousedown', (evt) => {
             this.moved = false;
@@ -131,6 +154,6 @@ export default class Map extends React.Component{
     }
 
     render(){
-        return <div className="map" id="map" ></div>
+        return <div className="map" id="map" ></div>;
     }
 }

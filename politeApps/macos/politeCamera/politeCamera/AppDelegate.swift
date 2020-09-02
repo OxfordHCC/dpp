@@ -125,11 +125,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
 
                 let channel = try bootstrap.bind(host: "127.0.0.1", port: 9001).wait()
-                //try channel.closeFuture.wait()
-                //var buffer = channel.allocator.buffer(capacity: line.utf8.count)
-                //buffer.write(string: line)
-                //let envelope = AddressedEnvelope(remoteAddress: remoteAddr, data: buffer)
-                //channel.writeAndFlush(envelope, promise: nil)
               }catch{
                   print("some error happened: \(error)")
               }
@@ -182,7 +177,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     // MARK: - Vision - copied heavily from basic vision example from Apple
-    /// - Tag: PerformRequests
     fileprivate func performVisionRequest(image: CGImage, orientation: CGImagePropertyOrientation) {
         
         // Fetch desired requests based on switch status.
@@ -441,7 +435,7 @@ class HTTPHandler: ChannelInboundHandler {
     public typealias OutboundOut = HTTPServerResponsePart
     var controller: AppDelegate
     
-    init(controller:AppDelegate){
+    init(controller: AppDelegate){
         self.controller = controller
     }
     private enum State {

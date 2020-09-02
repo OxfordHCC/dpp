@@ -41,7 +41,8 @@ const Current = ({ currentIntersections }) => {
     return (
 		<div className="main page"
              style={({
-                 overflow:"hidden"
+                 overflow:"hidden",
+                 "overflow-y":"auto"
              })}
         >
           {Content()}
