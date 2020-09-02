@@ -1,5 +1,5 @@
 import React from 'react';
-import IntersectionList from '../component/intersection-list';
+import IntersectionList from './intersection-list';
 import { Button, Header } from 'semantic-ui-react';
 
 

@@ -48,9 +48,13 @@ const Main = ({error}) => {
             <Route path="/settings">
               <Settings/>
             </Route>
+            <Route path="/intersection">
+              Test
+            </Route>
             <Route path="/">
               <Current/>
             </Route>
+            
           </Switch>
           <ErrorMessage error={error}/>
           <div className="menu" style={({

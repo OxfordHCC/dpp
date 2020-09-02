@@ -8,6 +8,5 @@ export const setCurrent = entries => ({
 
 export const refreshCurrent = () => async (dispatch, getState) => {
 	const entries = await intersection.getCurrent();
-	console.log('refresh current', entries);
 	dispatch(setCurrent(entries));
 }

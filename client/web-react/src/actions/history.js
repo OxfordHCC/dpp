@@ -13,6 +13,11 @@ const selectDate = (selectedDateISO) => ({
     selectedDateISO
 });
 
+export const SELECT_INTERSECTION = "SELECT_INTERSECTION";
+export const selectIntersection = (intersection) => ({
+	type: SELECT_INTERSECTION,
+	intersection
+});
 
 //todo: move to history library
 export const showHistory = (date) => async (dispatch) => {

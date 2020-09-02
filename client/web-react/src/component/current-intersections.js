@@ -1,5 +1,5 @@
 import React from 'react';
-import IntersectionList from './intersection-list';
+import IntersectionList from '../container/intersection-list';
 
 const NoIntersections = () => {
     return <div className="no-intersections">No intersections</div>

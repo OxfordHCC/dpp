@@ -5,17 +5,6 @@ import { Button } from 'semantic-ui-react';
 import ReactDOM from 'react-dom';
 
 
-const PopupContent = ({ latlng }) => {
-	
-	return (
-		<div>
-		  <Button primary onClick={() => console.log('aaa')}>
-            Mock location
-          </Button>
-		</div>
-	);
-};
-
 export default class Map extends React.Component{
     constructor(props){
         super(props);
@@ -51,30 +40,43 @@ export default class Map extends React.Component{
         },time+100);
     }
 
-    drawCircle({point, options}){
-        return L.circle(point, options).addTo(this.userLayer);
+    attachEvents(element, handlers = {}){
+        Object.entries(handlers).forEach(([event, handle]) => {
+            element.on(event, handle);
+        });
     }
 
-    drawMarker({point, options}){
+    drawCircle({ point, options, eventHandlers  }){
+        return this.attachEvents(
+            L.circle(point, options).addTo(this.userLayer)
+            , eventHandlers);
+    }
+
+    drawMarker({ point, options }){
         return L.marker(point, options).addTo(this.userLayer);
     }
 
     componentDidUpdate(prevProps){
         this.userLayer.clearLayers();
-		
-        //for each path, draw path
+
+        //draw paths
         if(this.props.paths){
-            this.props.paths.filter(x => x !== undefined)
+            this.props.paths
+                .filter(x => x !== undefined && x !== null)
                 .forEach(path => this.drawPath(path));
         }
-		
+
+        //draw markers
         if(this.props.markers){
-            this.props.markers.filter(x => x !== undefined)
+            this.props.markers
+                .filter(x => x !== undefined && x !== null)
                 .forEach(x => this.drawMarker(x));
         }
-		
+
+        //draw circles
         if(this.props.circles){
-            this.props.circles.filter(x => x !== undefined)
+            this.props.circles
+                .filter(x => x !== undefined && x !== null)
                 .forEach(x => this.drawCircle(x));
         }
 		

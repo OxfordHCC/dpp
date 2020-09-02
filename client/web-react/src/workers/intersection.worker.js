@@ -39,8 +39,6 @@ onmessage = (evt) => {
 			  return acc;
 		  }, []);
 
-	console.log('paths', paths);
-
 	const cartesianDevices = devices.map(toCartesian);
 	const processed = (getIntersections(paths, cartesianDevices) || [])
 	.filter((x,i,arr) => {

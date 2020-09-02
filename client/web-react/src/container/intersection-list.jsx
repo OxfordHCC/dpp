@@ -1,20 +1,24 @@
 import React from 'react';
-import { Unique } from '../lib/util';
-import IntersectionCard from './intersection-card';
+import { connect } from 'react-redux';
+import { Unique } from '../lib/util'; //TODO: why is this not lowercase?
+import IntersectionCard from '../component/intersection-card';
 import { Label } from 'semantic-ui-react';
 import { classObj } from '../lib/util';
+import { selectIntersection } from '../actions/history';
 import '../style/intersection-list.css';
 
-const IntersectionList = ({ intersections, withControls, collapsed }) => {
+
+const IntersectionList = ({ selectIntersection, selectedIntersection, intersections, withControls, collapsed }) => {
     const categories = intersections
           .filter(Unique('detectionType'))
           .map(x => x.detectionType);
     
-	const toCard = inx => <IntersectionCard
-                            key={inx.id}
-                            intersection={inx}
-                            withControls={withControls}
-                          />;
+	const toCard = inx => <div onClick={() => selectIntersection(inx) }>
+                            <IntersectionCard
+                              intersection={inx}
+                              withControls={withControls}
+                            />
+                          </div>;
     const intersectionCards = intersections.map(toCard);
     
     const Filters = () => {
@@ -58,4 +62,12 @@ const IntersectionList = ({ intersections, withControls, collapsed }) => {
     );
 };
 
-export default IntersectionList;
+const stateToProps = (state) => ({
+    selectedIntersection: state.history.selectedIntersection
+});
+
+const dispatchToProps = (dispatch) => ({
+    selectIntersection: (inx) => dispatch(selectIntersection(inx))
+});
+
+export default connect(stateToProps, dispatchToProps)(IntersectionList);
