@@ -77,11 +77,24 @@ const History = ({
         showHistory(date);
     }, [date, showHistory]);
 
+
+    //find appropriate bounds
     let bounds = null;
-    if(selectedIntersection){
+
+    //first try to get selected intersection bounds
+    try{
         bounds = location.getBoundsArray([selectedIntersection], { min: 300 });
-    }else{
-        bounds = location.getBoundsArray(openroutes, { pad: 0.1 });
+    }catch(e){
+        console.warn(e);
+    }
+
+    //if that failed, try to get routed path  bounds
+    if(!bounds){
+        try{
+            bounds = location.getBoundsArray(openroutes, { pad: 0.1 });
+        }catch(e){
+            console.warn(e);
+        }
     }
 
     const deviceCircles = devices.map(getDeviceCircle);

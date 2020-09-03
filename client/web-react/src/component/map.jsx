@@ -47,9 +47,14 @@ export default class Map extends React.Component{
     }
 
     drawCircle({ point, options, eventHandlers  }){
-        return this.attachEvents(
-            L.circle(point, options).addTo(this.userLayer)
-            , eventHandlers);
+        try{
+            return this.attachEvents(
+                L.circle(point, options).addTo(this.userLayer)
+                , eventHandlers);
+        }catch(err){
+            console.warn(err);
+            return undefined; //this is for the linter
+        }
     }
 
     drawMarker({ point, options }){

@@ -129,7 +129,8 @@ function getLocationHistory(startMs, endMs){
 
 function getBoundsArray(objArr, opts){
 	if(!objArr || objArr.length === 0){
-		return undefined;
+		//return undefined;
+		throw "getBoundsArray(objArr), objArr falsy or length 0";
 	}
 	const latLon = objArr.map(objToLatLon);
 	let bounds = L.polyline(latLon).getBounds();
