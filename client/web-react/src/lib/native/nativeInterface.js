@@ -31,8 +31,21 @@ async function locationUpdate(events){
 	}));
 	
 	//store location entries
-	location.bulkPut(locations);
+	locations = await location.bulkPut(locations);
 
+	if(locations.length <= 0){
+		//do nothing
+		return;
+	}
+
+	if(lastLocation
+	   && locations.length === 1
+	   && locations[0].latitude === lastLocation.latitude
+	   && locations[0].longitude === lastLocation.longitude){
+		return;
+	}
+
+	
 	//try to also compute intersections
 	try{
 		const latestEvent = last(locations);
@@ -40,20 +53,26 @@ async function locationUpdate(events){
 		const deviceBounds = location.getBoundsArray(openroutes, { pad: 0.1, min: 500 });
 		const devices = await device.getAround(deviceBounds);
 
+
+		//intersections calculated using the new location updates
 		const newIntersections = (await location.computeIntersections(openroutes, devices))
-			  .map(inx => ({ //mark intersections computed using last location as open
+			  .map(inx => ({
 				  ...inx,
+				  //mark intersections computed using last location as open
 				  endMs: (inx.path[1].timestamp === latestEvent.timestamp)? -1 : inx.endMs
 			  }));
 
-		//old intersections are marked as closed
+		
+		//existing intersections
 		const oldIntersections = (await intersection.getCurrent())
 			  .filter(inx => inx.detectionType === "geolocation")
 			  .map(inx => ({
 				  ...inx,
 				  endMs: inx.path[1].timestamp
 			  }));
-	
+
+//		const toClose = oldInxs.filter(notIn(newInxs));
+//		const toAdd = newInxs.filter(notIn(oldInxs));
 	
 		await intersection.bulkPut([...oldIntersections, ...newIntersections]);
 		store.dispatch(refreshCurrent());

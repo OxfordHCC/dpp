@@ -14,7 +14,6 @@ import {
 
 onmessage = (evt) => {
 	const { entries, port } = evt.data;
-	console.log('entries', entries);
 
 	const stdPll = (entries[0].latitude + entries[entries.length-1].latitude)/2;
 

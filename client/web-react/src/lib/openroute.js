@@ -76,6 +76,7 @@ function estimateTime(recorded, estimated){
 }
 
 async function estimatePath(entries, doEstimateTime = true){
+	entries = entries.filter(x => x !== null && x !== undefined);
 	if(!entries || entries.length === 0){
 		console.warn("getEstimatedPath entries length 0."); 
 		return []; 

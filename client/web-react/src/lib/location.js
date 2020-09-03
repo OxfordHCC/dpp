@@ -108,7 +108,7 @@ async function bulkPut(entries){
 	const simplified = await compressPoints(entries);
 	await db.location.bulkPut(simplified);
 	await storeLastPosition(last(simplified));
-	return;
+	return simplified;
 }
 
 //leaflet uses 3 (THREE) different _mostly_ interchangeable formats for coordinates: {lat, lon}, {lat, lng} and [lat, lon]
