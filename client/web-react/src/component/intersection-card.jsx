@@ -1,7 +1,8 @@
 import React from 'react';
 //import '../style/intersection-card.css';
-import { Card, Checkbox } from 'semantic-ui-react';
+import { Card, Checkbox, Button } from 'semantic-ui-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 
 async function politeCamReq(show){
@@ -90,7 +91,14 @@ const IntersectionCard = ({intersection, expanded = false, withControls=false}) 
           header={ Name() }
           meta={ TimeLabels() }
           description={ Description(intersection) }
-          extra={ DetectionType() }
+          extra={(
+              <div>
+                {DetectionType()}
+              <Link to={{
+                  pathname: "/intersection",
+                  intersection: JSON.stringify(intersection)
+              }}><Button floated='right'>View</Button></Link>
+              </div>)}
         />
 	);
 }

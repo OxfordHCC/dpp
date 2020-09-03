@@ -61,7 +61,6 @@ const History = ({
         }
     });
 
-
     const getOpenRouteLine = (points) => ({
         points: points.map(({latitude, longitude}) => [latitude, longitude]), 
         options: {
@@ -81,20 +80,16 @@ const History = ({
     //find appropriate bounds
     let bounds = null;
 
-    //first try to get selected intersection bounds
     try{
+    //first try to get selected intersection bounds
         bounds = location.getBoundsArray([selectedIntersection], { min: 300 });
-    }catch(e){
-        console.warn(e);
+    }catch(err){
+        console.warn(err);
     }
 
     //if that failed, try to get routed path  bounds
     if(!bounds){
-        try{
-            bounds = location.getBoundsArray(openroutes, { pad: 0.1 });
-        }catch(e){
-            console.warn(e);
-        }
+        bounds = location.getBoundsArray(openroutes, { pad: 0.1 });
     }
 
     const deviceCircles = devices.map(getDeviceCircle);

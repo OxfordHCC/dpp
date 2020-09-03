@@ -8,20 +8,19 @@ import { selectIntersection } from '../actions/history';
 import '../style/intersection-list.css';
 
 
-const IntersectionList = ({ selectIntersection, selectedIntersection, intersections, withControls, collapsed }) => {
+const IntersectionList = ({ selectIntersection, selectedIntersection, intersections, withControls, collapsed }) => {    
 
-    const [listFilter, setListFilter] = React.useState(categories);
-    
     const categories = intersections
           .filter(Unique('detectionType'))
           .map(x => x.detectionType);
 
+    const [listFilter, setListFilter] = React.useState(categories);
+
 
     React.useEffect(() => {
         setListFilter(categories);
-    }, categories);
+    }, [categories.join('/')]);
 
-    
 	const toCard = inx => <div onClick={() => selectIntersection(inx) }>
                             <IntersectionCard
                               intersection={inx}
@@ -30,7 +29,7 @@ const IntersectionList = ({ selectIntersection, selectedIntersection, intersecti
                           </div>;
     
     const intersectionCards = intersections
-          .filter(inx => !listFilter.includes(inx.detectionType))
+          .filter(inx => listFilter.includes(inx.detectionType))
           .map(toCard);
     
     const Filters = () => {

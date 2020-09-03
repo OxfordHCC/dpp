@@ -13,6 +13,7 @@ import Settings from "./settings";
 import History from "./history";
 import { Menu, Icon } from 'semantic-ui-react';
 import ErrorMessage from '../component/errorMessage';
+import IntersectionPage from './intersectionPage';
 
 const CustomMenuItem = ({ to, children }) => {
     const match = useRouteMatch({
@@ -49,7 +50,7 @@ const Main = ({error}) => {
               <Settings/>
             </Route>
             <Route path="/intersection">
-              Test
+              <IntersectionPage/>
             </Route>
             <Route path="/">
               <Current/>
