@@ -9,9 +9,18 @@ import '../style/intersection-list.css';
 
 
 const IntersectionList = ({ selectIntersection, selectedIntersection, intersections, withControls, collapsed }) => {
+
+    const [listFilter, setListFilter] = React.useState(categories);
+    
     const categories = intersections
           .filter(Unique('detectionType'))
           .map(x => x.detectionType);
+
+
+    React.useEffect(() => {
+        setListFilter(categories);
+    }, categories);
+
     
 	const toCard = inx => <div onClick={() => selectIntersection(inx) }>
                             <IntersectionCard
@@ -19,7 +28,10 @@ const IntersectionList = ({ selectIntersection, selectedIntersection, intersecti
                               withControls={withControls}
                             />
                           </div>;
-    const intersectionCards = intersections.map(toCard);
+    
+    const intersectionCards = intersections
+          .filter(inx => !listFilter.includes(inx.detectionType))
+          .map(toCard);
     
     const Filters = () => {
         return categories
@@ -27,7 +39,10 @@ const IntersectionList = ({ selectIntersection, selectedIntersection, intersecti
                  <Label
                    as="a"
                    onClick={() => {
-                       console.log('clicked');
+                       if(listFilter.includes(cat)){
+                           return setListFilter(listFilter.filter(f => f !== cat));
+                       }
+                       return setListFilter(listFilter.concat(cat));
                    }}
                    key={cat}>
                    {cat}
