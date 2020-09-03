@@ -90,14 +90,18 @@ const IntersectionCard = ({intersection, expanded = false, withControls=false}) 
           fluid
           header={ Name() }
           meta={ TimeLabels() }
-          description={ Description(intersection) }
+          description={ (expanded)? Description(intersection) : null }
           extra={(
               <div>
-                {DetectionType()}
-              <Link to={{
-                  pathname: "/intersection",
-                  intersection: JSON.stringify(intersection)
-              }}><Button floated='right'>View</Button></Link>
+                { DetectionType() }
+                {
+                    !expanded?
+                        <Link to={{
+                            pathname: "/intersection",
+                            intersection: JSON.stringify(intersection)
+                        }}><Button floated='right'>View</Button></Link>
+                    : <span/>
+                }
               </div>)}
         />
 	);

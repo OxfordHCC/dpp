@@ -8,7 +8,7 @@ import { selectIntersection } from '../actions/history';
 import '../style/intersection-list.css';
 
 
-const IntersectionList = ({ selectIntersection, selectedIntersection, intersections, withControls, collapsed }) => {    
+const IntersectionList = ({ expanded = false, selectIntersection, selectedIntersection, intersections, withControls, collapsed }) => {    
 
     const categories = intersections
           .filter(Unique('detectionType'))
@@ -25,6 +25,7 @@ const IntersectionList = ({ selectIntersection, selectedIntersection, intersecti
                             <IntersectionCard
                               intersection={inx}
                               withControls={withControls}
+                              expanded={expanded}
                             />
                           </div>;
     

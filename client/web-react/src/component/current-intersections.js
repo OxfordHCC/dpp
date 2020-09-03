@@ -10,7 +10,7 @@ const CurrentIntersections = ({intersections, withControls}) => {
         <div className="current-intersections">
             {   
             intersections.length > 0 ? 
-					<IntersectionList intersections={intersections} withControls={withControls}/> : 
+					<IntersectionList expanded={true} intersections={intersections} withControls={withControls}/> : 
                 <NoIntersections/>
             }
         </div>
