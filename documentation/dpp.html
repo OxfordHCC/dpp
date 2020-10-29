@@ -1,0 +1,1160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-10-29 Thu 09:38 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#web_component">1. Web Component</a>
+<ul>
+<li><a href="#web_native_adapters">1.1. Communicating with the Native Component: Native Adapters</a>
+<ul>
+<li><a href="#orgf501b1d">1.1.1. Adding new native adapters</a></li>
+</ul>
+</li>
+<li><a href="#org977eb3f">1.2. Storage</a></li>
+</ul>
+</li>
+<li><a href="#native_component">2. Native Component</a>
+<ul>
+<li><a href="#native_dppwebview">2.1. DPPWebView</a></li>
+<li><a href="#native/detection_services">2.2. DetectionService</a>
+<ul>
+<li><a href="#service_manager">2.2.1. Service Manager</a></li>
+</ul>
+</li>
+<li><a href="#events">2.3. Events</a></li>
+<li><a href="#org18c42c8">2.4. EventEmitter</a></li>
+<li><a href="#event_queue">2.5. EventQueue</a></li>
+<li><a href="#native/web_comm">2.6. Communicating with the Web component</a></li>
+</ul>
+</li>
+<li><a href="#privacy_manifest">3. Privacy Manifests</a></li>
+<li><a href="#messages">4. Messages</a>
+<ul>
+<li><a href="#messages/native">4.1. Web to Native Messages</a></li>
+<li><a href="#org3cc3ab8">4.2. Native to Web Messages</a></li>
+</ul>
+</li>
+<li><a href="#intersections">5. Intersections</a></li>
+<li><a href="#detection_services">6. Intersection Detection Channels</a>
+<ul>
+<li><a href="#ds_udp">6.1. UDP</a>
+<ul>
+<li><a href="#detection_services/udp/sync">6.1.1. Synchronisation</a></li>
+<li><a href="#detection_services/udp/computing">6.1.2. Computing Intersections</a></li>
+</ul>
+</li>
+<li><a href="#ds_location">6.2. Location</a>
+<ul>
+<li><a href="#ds_location/compression">6.2.1. Compression</a></li>
+<li><a href="#ds_location/route_estimation">6.2.2. Route estimation</a></li>
+<li><a href="#ds_location/compile">6.2.3. Compiling Intersections</a></li>
+<li><a href="#external_services">6.2.4. External services</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgd496d68">7. Glossary</a></li>
+</ul>
+</div>
+</div>
+<p>
+The Data Protection Passport records and displays the user's history
+of interactions with devices. This document details the architectural
+design choices of the Data Protection Passports app and discusses
+technical details which may be of interest to future developers.
+</p>
+
+<div id="outline-container-org1cc9c78" class="outline-2">
+<h2 id="web_component"><span class="section-number-2">1</span> Web Component</h2>
+<div class="outline-text-2" id="text-web_component">
+<p>
+The Web component is the main component of the Data Protection
+Passport app: it contains the UI, main storage layer and high level
+logic. As the name suggests, it is a web application running inside
+a <a href="#native_dppwebview">DPPWebView</a>, inside the <a href="#native_component">native component</a>.
+</p>
+
+<p>
+Rendering is handled using <a href="http://reactjs.org">React</a>, and details on its components, as
+well as implementaion details of the web compoment in general, can
+be found in the <a href="./web-reference/index.html">web reference</a> documentation.
+</p>
+</div>
+
+<div id="outline-container-orgfb6c25d" class="outline-3">
+<h3 id="web_native_adapters"><span class="section-number-3">1.1</span> Communicating with the Native Component: Native Adapters</h3>
+<div class="outline-text-3" id="text-web_native_adapters">
+<p>
+The Web component uses adapters to communicate with the Native
+component. These adapters abstract the underlying mechanisms of
+messaging and expose a common API to be used by libraries and other
+components.
+</p>
+
+<p>
+The currently implemented adapters are: 
+</p>
+<dl class="org-dl">
+<dt>Android</dt><dd>used when app is started in an Android WebView.</dd>
+<dt>Browser</dt><dd>used when the web component is ran outside of the
+native wrapper (ie. in a browser).</dd>
+</dl>
+
+<p>
+The Web component sends <a href="#messages">Messages</a> to the <a href="#native_component">Native component</a> through
+native adapters' <i>send</i> function. Web components should never have to
+call this function directly. Instead, the <i>nativeInterface</i> object
+wraps these function calls and exposes the following interface:
+</p>
+
+<dl class="org-dl">
+<dt>getServices</dt><dd>get available services on the platform</dd>
+<dt>settings</dt><dd><dl class="org-dl">
+<dt>toggleService(serviceId)</dt><dd>toggle service indicated by sevice<sub>id</sub></dd>
+</dl></dd>
+<dt>syncUDP</dt><dd>trigger <a href="#detection_services/udp/sync">UDP sync</a> and pass existing udp events.</dd>
+</dl>
+
+
+<p>
+To call any of these functions from a library, we can simply do:
+</p>
+<div class="org-src-container">
+<pre class="src src-javascript">const services = await native.getServices();
+</pre>
+</div>
+
+
+<p>
+The android native adapter uses a callback similar to its
+<a href="#native/web_comm">native counterpart</a>.
+</p>
+
+<p>
+To send messages from web to native, it uses the <i>window.Android</i>
+object that is injected by the Android Native Component itself, in
+the DPPWebView.
+</p>
+
+<p>
+The <a href="./web-reference/module-web%20adapter.html">"web" native adapter</a> does not use a callback map, but can
+instead leverage asynchonous js constructs directly, since we never
+leave the evaluation context and thus there's no need to serialize
+messages.
+</p>
+</div>
+
+<div id="outline-container-orgf501b1d" class="outline-4">
+<h4 id="orgf501b1d"><span class="section-number-4">1.1.1</span> Adding new native adapters</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<ol class="org-ol">
+<li>Create an object implementing the following methods:
+<dl class="org-dl">
+<dt>send(message: Message)</dt><dd>used to send messages from web to
+native. How the send function is implemented is up to each
+adapter individually. This function should return a Promise
+which resolves once a reply is returned from the native
+component.</dd>
+<dt>setMessageHandler(handler: () =&gt; {} | Function)</dt><dd>the
+function passed as argument needs to be called on the
+incoming message from native. The message needs to conform to
+the <a href="#messages">Message</a> schema and rules.</dd>
+</dl></li>
+
+<li>Modify the <i>getNative</i> function in <i>src/native/native.js</i> to return
+the new adapter object as needed. For example, the android
+adapter is returned when the window.Android is a truthy
+value. This works because window.Android is injected by the
+Android Native Component inside the</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org977eb3f" class="outline-3">
+<h3 id="org977eb3f"><span class="section-number-3">1.2</span> Storage</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+The native component holds crude sensor data while the app is in
+the background, but the principal persistence layer is in the web
+component.	Data is stored in IndexedDB using <a href="https://dexie.org/">Dexie</a> as a wrapper
+around its API. The following tables are currently in use:
+</p>
+<dl class="org-dl">
+<dt>location</dt><dd>history of location readings</dd>
+<dt>intersection</dt><dd>computed intersections</dd>
+<dt>openroute</dt><dd>estimated paths using the openroute service</dd>
+<dt>meta</dt><dd>holds <a href="#external_services">external services'</a> api keys</dd>
+</dl>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org580b404" class="outline-2">
+<h2 id="native_component"><span class="section-number-2">2</span> Native Component</h2>
+<div class="outline-text-2" id="text-native_component">
+<p>
+The native component acts as a wrapper for the web component and
+provides access to lower level interfaces such as UDP and Location
+background services which are not available through the Web
+API. The <a href="#web_component">web component</a> is launched inside a web browser and data is
+passed between the two via <a href="#messages">Messages</a>. The communication mechanism is
+platform dependent and is the responsibility of the native
+component developer to implement.
+</p>
+
+<p>
+On Android, the web browser is a WebView and the communication
+protocol with the web components is described in the Web-Native
+communication section. Since Android is the only native component
+currently implemented, the rest of this document will reffer to the
+android native component as <i>the</i> "native component".
+</p>
+
+<p>
+More details relating to code and implementation can be found in the 
+<a href="./native-reference/app/me.zugri.ptracker/index.html">native component reference documentation</a>.
+</p>
+</div>
+
+<div id="outline-container-org2bf514d" class="outline-3">
+<h3 id="native_dppwebview"><span class="section-number-3">2.1</span> DPPWebView</h3>
+<div class="outline-text-3" id="text-native_dppwebview">
+<p>
+The DPPWebView class manages the WebView in which the Web
+component is run. It extends the WebView class with the following
+functionality:
+</p>
+<ul class="org-ul">
+<li>injects <i>Android</i> object in the WebView's <i>window</i> object. This
+is used by the web component to execute code in the Native
+component.</li>
+<li>loads the <i>index.html</i> page of the Web component to start
+loading the web component.</li>
+<li>defines the functionality needed to communicate with the Web component.</li>
+<li>binds itself to the EventEmitter</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orge7d3b0e" class="outline-3">
+<h3 id="native/detection_services"><span class="section-number-3">2.2</span> DetectionService</h3>
+<div class="outline-text-3" id="text-native/detection_services">
+<p>
+DetectionServices provide access to low level device
+functionality. They are usually implemented as foreground services
+which remain running even when the app is closed. This is in fact
+the reason why we choose to request location updates inside a
+DetectionService instead of using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API">Web Location API</a>: the web
+application would be killed when sent to the background, and the
+location would stop updating.
+</p>
+
+<p>
+The currently implemented DetectionServices are Location and UDP,
+the mechanics of which are discussed in more detail in the
+<a href="#detection_services">Intersection Detection Channels</a> section.
+</p>
+
+<p>
+To create a new detection service, extend the DetectionService
+class and register the service triple in the definitions property
+of the Service Manager.
+</p>
+</div>
+
+<div id="outline-container-orgc486e18" class="outline-4">
+<h4 id="service_manager"><span class="section-number-4">2.2.1</span> Service Manager</h4>
+<div class="outline-text-4" id="text-service_manager">
+<p>
+The ServiceManager singleton starts, stops and retrieves info
+about registered DetectionServices.
+</p>
+
+<p>
+Registered DetectionServices are those services defined in the
+<i>definitions</i> property of the ServiceManager class. This property
+maps service ids to triples of (class refrence, list of
+permissions, display name).
+</p>
+
+<p>
+Steps taken when starting a service:
+</p>
+<ul class="org-ul">
+<li>requests permissions required by the detection service</li>
+<li>binds the service to the context of the app</li>
+<li>if successful, 
+<ul class="org-ul">
+<li>the service's start method is called</li>
+<li>the status of the service is set to enabled</li>
+</ul></li>
+<li>if any error is thrown, the service is stopped</li>
+</ul>
+
+<p>
+Steps taken when stopping the service: 
+</p>
+<ul class="org-ul">
+<li>unbinds the service from the context of the app</li>
+<li>calls the service's stop method</li>
+<li>sets status of the service to disabled</li>
+</ul>
+
+<p>
+When the service manager is loaded (on app launch), it goes
+through all registered services and checks whether they need to
+be started or not, based on their toggle status.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga4b67f7" class="outline-3">
+<h3 id="events"><span class="section-number-3">2.3</span> Events</h3>
+<div class="outline-text-3" id="text-events">
+<p>
+Events are generated by <a href="#native/detection_services">Detection Services</a>, stored in the <a href="#event_queue">Event
+Queue</a>, and transmitted via <a href="#messages">Messages</a> to the <a href="#web_component">Web Component</a>.  In the
+native component, they're wrapped inside the <a href="./native-reference/app/me.zugri.ptracker/-w-v-event/index.html">WVEvent class</a>.
+</p>
+
+<p>
+The following types of events are currently in use:
+</p>
+<dl class="org-dl">
+<dt>LOCATION_UPDATE</dt><dd>emitted by the <a href="#ds_location">Location Service</a> when the
+location is updated</dd>
+<dt>UDP_ENTER</dt><dd>emitted by the <a href="#ds_udp">UDP Detection Service</a> when a
+device is detected over udp</dd>
+<dt>UDP_EXIT</dt><dd>emitted by the <a href="#ds_udp">UDP Detection Service</a> when a device
+is no longer detected over udp</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org18c42c8" class="outline-3">
+<h3 id="org18c42c8"><span class="section-number-3">2.4</span> EventEmitter</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+The event emitter is an intermediary between native events such as
+location updates and the <a href="#native_dppwebview">DPPWebView</a>.
+</p>
+
+<p>
+When an event is emitted, it forwards the event to the bound
+DPPWebView if the Web component is ready to receive events,
+otherwise it sends it to the <a href="#event_queue">Event Queue</a>.
+</p>
+
+<p>
+When the Web component sends a <a href="#messages/native">WEBVIEW_READY</a> message, the
+event queue is flushed to the Web component.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf1389ca" class="outline-3">
+<h3 id="event_queue"><span class="section-number-3">2.5</span> EventQueue</h3>
+<div class="outline-text-3" id="text-event_queue">
+<p>
+An event queue acts as a buffer for events emitted by detection
+services. The EventEmitter uses the EventQueue to store
+events until the DPPWebView is ready to receive them.
+</p>
+
+<p>
+It uses sqlite to store events in a table named EventQueue with
+the following schema:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sql">CREATE TABLE EventQueue (
+  timestamp INTEGER,
+  type TEXT,
+  data TEXT
+)
+</pre>
+</div>
+
+<p>
+As expected, this schema matches the class description of the
+WVEvent. The main difference is that the data field is a UTF-8
+serialized JSON.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org01d6ece" class="outline-3">
+<h3 id="native/web_comm"><span class="section-number-3">2.6</span> Communicating with the Web component</h3>
+<div class="outline-text-3" id="text-native/web_comm">
+<p>
+Communication between web and native is based on asynchronous
+messages. Because different execution contexts are involved,
+passing messages between them requires us to serialize messages.
+</p>
+
+<p>
+When a message M<sub>1</sub> is sent, a callback C is registered in memory
+using M<sub>1</sub>'s UUID.  When a reply M<sub>2</sub> is received for M<sub>1</sub>
+(i.e. M<sub>1.id</sub> <code>=</code> M<sub>2.id</sub> ∧ M<sub>2.type</sub> <code>=</code> "reply"), callback C is called
+with M<sub>2</sub>'s data and removed from the callback map.
+</p>
+
+<p>
+To send a message to the Web component, a piece of javascript is
+evaluated in the context of the DPPWebView using the WebView's
+evaluateJavascript function, where a global function is called with
+the serialized Message as parameter.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-kotlin">private fun sendMessage(message: JSONObject){
+[...]	
+  this.evaluateJavascript("AndroidInterface.receive($message)", null)
+[...]
+}
+</pre>
+</div>
+
+<p>
+The AndroidInterface object is defined in the <a href="#web_native_adapters">Android adapter</a> of
+the Web component.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org07eb8c3" class="outline-2">
+<h2 id="privacy_manifest"><span class="section-number-2">3</span> Privacy Manifests</h2>
+<div class="outline-text-2" id="text-privacy_manifest">
+<p>
+Privacy manifests are JSON files that describe the intent of a
+device as it pertains to data collection and processing.  They
+should should contain as much info about the device it represents
+as possible.
+</p>
+
+<p>
+Devices broadcast these files through various channels, but can
+also be compiled indirectly from third parties. In DPP, we
+implemented both direct and indirect collection of privacy
+manifests: <a href="#ds_udp">UDP</a>, respectively <a href="#ds_location">Location</a> services.
+</p>
+
+<p>
+We do not define a strict schema for the Privacy Manifests.  The
+only required field is a uuidv4-valued field named <span class="underline">uuid</span>.
+Typically, the manifests may include fields like name, data
+controller and so on.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga492afc" class="outline-2">
+<h2 id="messages"><span class="section-number-2">4</span> Messages</h2>
+<div class="outline-text-2" id="text-messages">
+<p>
+A message is the communication data unit between the native and web
+components. They're used to communicate <a href="#events">Events</a> (e.g. location
+update) and commands (e.g. sync udp) between the native and web
+components.
+</p>
+
+<p>
+Messages are JSON objects with the following schema:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-javascript">{
+  "id": String,
+  "type": String, 
+  "error": { error: String },
+  "data": JSONObject | JSONArray
+}
+</pre>
+</div>
+
+<dl class="org-dl">
+<dt>id</dt><dd>UUID of message.  Each non-reply message must generate a UUID.</dd>
+</dl>
+<p>
+Reply messages use the same UUID as the message they're replying
+to.
+</p>
+<dl class="org-dl">
+<dt>type</dt><dd>Type of message. See types of message below.  Messages are</dd>
+</dl>
+<p>
+sent to message handlers based on this value.  If type is 'reply',
+the message is a reply to another message.
+</p>
+<dl class="org-dl">
+<dt>error</dt><dd>JSON containing human readable error message.  If no error,</dd>
+</dl>
+<p>
+this is null.
+</p>
+<dl class="org-dl">
+<dt>data</dt><dd>JSON containing message-specific data.  In case of an error,</dd>
+</dl>
+<p>
+this is null.
+</p>
+</div>
+
+<div id="outline-container-org39f6192" class="outline-3">
+<h3 id="messages/native"><span class="section-number-3">4.1</span> Web to Native Messages</h3>
+<div class="outline-text-3" id="text-messages/native">
+<dl class="org-dl">
+<dt>TOGGLE_DETECTION_SERVICE</dt><dd>Toggle the status of
+DetectionService indicated by <i>serviceId</i>.</dd>
+
+<dt>GET_DETECTION_SERVICES</dt><dd>Request list of
+available detection services.</dd>
+
+<dt>SYNC_UDP</dt><dd>Trigger UDP DetectionService sync.</dd>
+
+<dt>WEBVIEW_READY</dt><dd>Signal that webview has loaded and is
+ready to recieve events.</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-org3cc3ab8" class="outline-3">
+<h3 id="org3cc3ab8"><span class="section-number-3">4.2</span> Native to Web Messages</h3>
+<div class="outline-text-3" id="text-4-2">
+<dl class="org-dl">
+<dt>EVENT</dt><dd>Message containing events from detection services.</dd>
+</dl>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0ea91c8" class="outline-2">
+<h2 id="intersections"><span class="section-number-2">5</span> Intersections</h2>
+<div class="outline-text-2" id="text-intersections">
+<p>
+When a user's data has potentially been collected by a device, or
+whenever the user is otherwise able to interact the deivce, we say
+that the user is <i>intersecting</i> with said device. Intersections are
+defined by:
+</p>
+
+<ul class="org-ul">
+<li>start time</li>
+<li>end time</li>
+<li>how was the intersection compiled (i.e. which detection channel)</li>
+<li>privacy manifest[link to privacy manifest section] of the intersecting device</li>
+</ul>
+
+<p>
+The JSON schema of an intersection is the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-javascript">Intersection: {
+  "id": Number,
+  "detectionType": String
+  "startMs": Number,
+  "endMs": Number
+}
+</pre>
+</div>
+
+<p>
+An intersection can be ongoing at a certain time <i>t</i>, meaning that
+the user is still within the area of effect of the device at that
+time. Such an intersection has an <i>endMs</i> value of -1 and is referred
+to as an <i>open intersection</i>. Conversely, it is a <i>closed intersection</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org454f5b4" class="outline-2">
+<h2 id="detection_services"><span class="section-number-2">6</span> Intersection Detection Channels</h2>
+<div class="outline-text-2" id="text-detection_services">
+<p>
+Intersections are collected through various channels. Usually, this
+is done in two steps: on the native side, a <a href="#native/detection_services">DetectionService</a>
+collects low level, "reagent" data which is transmitted in the form
+of events ; then on the web side, these events are compiled into
+intersections.
+</p>
+
+<p>
+Because this process stretches over both the native
+and the web components, and because jumping between sections would
+be nauseaous, in this section we describe a more cohesive story of
+how the detection services work and how data flows from <a href="#events">event</a> to
+<a href="#intersections">intersection</a>.
+</p>
+</div>
+
+<div id="outline-container-orgc4b04a1" class="outline-3">
+<h3 id="ds_udp"><span class="section-number-3">6.1</span> UDP</h3>
+<div class="outline-text-3" id="text-ds_udp">
+<p>
+The UDP detection service detects privacy manifests broadcast over
+UDP. Devices whose "range of action" is the same as the extent of
+the local network. Typically this would include home devices.
+</p>
+
+<p>
+More importantly though, the UDP protocol allows us to imitate
+other detection protocols which may be more useful in the real
+world, like bluetooth (or RF in general) broadcasts. For this
+reason the current implementation requires devices to periodically
+transmit packets in order to signal their presence.
+</p>
+
+<p>
+When entering and exiting the area of effect of a device (a
+privacy manifest is received), an <i>enter</i>, respectively <i>exit</i> event
+is sent to the Web component. This event then marks the start,
+respectively the end of the intersection with the device denoted
+by the privacy manifest.  Detailed description of how
+intersections are compiled from udp events is found below under
+<a href="#detection_services/udp/computing">Computing Intersections</a>.
+</p>
+
+<p>
+When a device is first detected, it gets added to a map and a
+UDP_ENTER event is emitted.  Every <i>Tc</i> seconds, the service
+removes devices from the map that have not signaled since the
+previous clean-up. When a device is removed, a UDP_EXIT
+event is emitted.
+</p>
+
+<p>
+This &lt;enter, exit&gt; pair of events describes the approximate window
+of time of interaction with the device. This is similar to how
+GeoFencing exposes events on android. An alternative would be to
+transmit &lt;enter, exit&gt; events based on network changes. We opted
+for the heartbeat-like version to also simulate how RF based
+protocols might be used in detection (ie Bluetooth).
+</p>
+</div>
+
+<div id="outline-container-org8524a1c" class="outline-4">
+<h4 id="detection_services/udp/sync"><span class="section-number-4">6.1.1</span> Synchronisation</h4>
+<div class="outline-text-4" id="text-detection_services/udp/sync">
+<p>
+Open UDP intersections are tracked inside Native's UDPService in
+in-memory data structures. These are also persisted in the Web
+component. In the eventuality of an app crash, these might get
+out of sync, so it is useful to have a mechanism that checks the
+integrity of the peristed app state with regards to UDP
+intersections.
+</p>
+
+<p>
+On app launch, <i>open</i> intersections (link to intersections/open)
+are retrieved and sent to Native by calling <i>native.syncUDP</i>.
+For each entry not found on the Native side, a UDP_EXIT event is
+created and emitted to Web, to close any left-over intersections.
+</p>
+
+<p>
+Scenario where intersections might be left out of sync (i.e. left
+open):
+</p>
+<ul class="org-ul">
+<li>User is in the area of effect of device <i>D</i>. It receives its
+privacy manifest over UDP and thus a new open intersection is
+stored on their app.</li>
+<li>User's app/phone crashes, clearing the memory.</li>
+<li>User moves out of device <i>D</i>'s area of effect.</li>
+<li>User restarts the app.</li>
+<li>The previously created intersection is still open and because
+the Native UDPService is not currently detecting any device, it
+will never emit an UDP_EXIT event.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0d6f56a" class="outline-4">
+<h4 id="detection_services/udp/computing"><span class="section-number-4">6.1.2</span> Computing Intersections</h4>
+<div class="outline-text-4" id="text-detection_services/udp/computing">
+<p>
+Given a sequence of UDP\<sub>ENTER</sub> and UDP\<sub>EXIT</sub> events,
+intersections are compiled by grouping events by the UUID in
+their pManifest and splitting the resulting sequences in pairs of
+[enter, exit] events. These pairs are then folded into an
+intersection with the following contents:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-pseudocode">intersection = {
+  id: start.id | null,
+  startMs: enter.timestamp,
+  endMs: exit.timestamp | -1,
+  pManifest: enter.data.pManifest,
+  detectionType: "UDP"
+}
+</pre>
+</div>
+
+<p>
+Two adjacent events of the same type (i.e. enter, enter or
+exit,exit) signal an integrity error. It means that either an
+exit, or an enter event has been somehow missed. The missing
+events are derived from existing events:
+</p>
+
+<p>
+ENTER ENTER -&gt; ENTER EXIT ENTER
+EXIT EXIT -&gt; ENTER EXIT ENTER EXIT
+</p>
+
+<p>
+Unpaired ENTER events at the end of the sequence are compiled
+into "open" interesctions (hence the -1 value for endMs).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org19b0065" class="outline-3">
+<h3 id="ds_location"><span class="section-number-3">6.2</span> Location</h3>
+<div class="outline-text-3" id="text-ds_location">
+<p>
+Some devices may not emit any privacy manifest, but their fixed
+location allows for their privacy manifest to be bound to a
+specific geographic location. These privacy manifests are recorded
+in a crowdsourced database served by the device server.
+</p>
+
+<p>
+The location service simply listens for location updates and
+relays them to the Web component. Location updates with an
+estimated accuracy of more than 50 meters are ignored.
+</p>
+
+<p>
+In the Web component, location updates are compressed, sent to the
+route estimation service and then compared against location-bound
+devices retrieved from the crowdsourced database to compile
+intersections. These steps are detailed in the following sections.
+</p>
+</div>
+
+<div id="outline-container-org0eceb2d" class="outline-4">
+<h4 id="ds_location/compression"><span class="section-number-4">6.2.1</span> Compression</h4>
+<div class="outline-text-4" id="text-ds_location/compression">
+<p>
+Location events are compressed to reduce noise, save storage
+space and reduce api calls to routing services.
+</p>
+
+<p>
+Compression works on lists of location readings ordered by
+timestamp. If we view these readings as circles on a map, where
+the center of the circle is denoted by the projected (latitude,
+longitude) coordinates and the radius of the circle by the
+accuracy of the reading, then we can visualize the compression
+algorithm as sequentially replacing two consecutive overlapping
+entries by an average of the two. 
+</p>
+
+<p>
+The average C<sub>m</sub> between two circles is taken as follows:
+</p>
+
+<p>
+∀ C<sub>1</sub>, C<sub>2</sub> two overlapping circles:
+</p>
+<ul class="org-ul">
+<li>the center of C<sub>m</sub> is the center of the segment defined by the
+two circles' centers:</li>
+</ul>
+<p>
+C<sub>m.x</sub> = (C<sub>1.x</sub> + C<sub>2.x</sub>)/2
+C<sub>m.y</sub> = (C<sub>1.y</sub> + C<sub>2.y</sub>)/2
+</p>
+
+<ul class="org-ul">
+<li>the radius of C<sub>m</sub> is the smaller of the two circles' radiuses:</li>
+</ul>
+<p>
+C<sub>m.r</sub> = min(C<sub>1.r</sub>, C<sub>2.r</sub>)
+</p>
+
+
+<p>
+To simplify our computation, we project the coordinates to a flat
+plane surface. The choice of algorithm to do this is a matter of
+trading complexity for accuracy. The current implementation uses
+an equirectangular projection, due to its simplicity. The
+alternative to having a projection step would be to employ
+non-euclidean geometry to calculate distance and intersections.
+</p>
+
+<p>
+Distance, projection, conversions and other geometry-related
+functions can be found in the <a href="./web-reference/module-geometry.html">geometry.js</a> library.
+</p>
+
+<p>
+The output of this compression is stored in the <i>location</i>
+table. Any future computation that requires the location history,
+works on this data.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9b08265" class="outline-4">
+<h4 id="ds_location/route_estimation"><span class="section-number-4">6.2.2</span> Route estimation</h4>
+<div class="outline-text-4" id="text-ds_location/route_estimation">
+<p>
+The location updates received from a device are not granular
+enough to capture the true path the user takes. This is
+especially true if one's GPS connection is weak or the battery is
+low on power. To compensate for this, the app makes use of an
+external route estimation API: OpenRouteService.
+</p>
+
+<p>
+Of course, the path estimated between two real location readings
+is only a guess.  We anticipate many improvements in this area to
+make this guess better (e.g. manual adjustments), but we can also
+imagine scenarios where guessing may not be appropriate and thus
+should be easily de-activated.
+</p>
+
+<p>
+The output of this step is stored in the <i>openroute</i> table.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2a76f30" class="outline-4">
+<h4 id="ds_location/compile"><span class="section-number-4">6.2.3</span> Compiling Intersections</h4>
+<div class="outline-text-4" id="text-ds_location/compile">
+<p>
+To compile intersections, we take the output of the route
+estimation step and chunk it into "overlapping" arrays of size 2,
+so that we get a string of segments. Each segment is compared
+against each device around the area of the path. When a segment
+intersects the circle of a device, an intersection is created at
+the timestmap of the head of the segment.
+</p>
+
+<p>
+Since the output of route estimation is quite granular, the
+timestamps of any two segment ends in the output array are usually
+very similar. Therefore, choosing either of them as <i>the</i>
+intersection time is a good enough estimate of the real
+intersection time which would be somewhere inbetween. If route
+estimation is ever to be left out or modified, this would need to
+be taken into consideration.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org106564a" class="outline-4">
+<h4 id="external_services"><span class="section-number-4">6.2.4</span> External services</h4>
+<div class="outline-text-4" id="text-external_services">
+<p>
+To provide the location-related functionality, the app needs to
+call several external services for route estimation, map rendering
+and device discovery.
+</p>
+
+<p>
+The software running these services is all under open-source/free
+licenses and have been selected for this reason. Documentation,
+source code and instructions on how to run instances of these
+services are found on their respective web pages.
+</p>
+
+<p>
+The crowdsourced database of devices used in the <a href="#ds_location">location
+detection service</a> is served by the <a href="http://github.com/oxfordhcc/dpp/tree/master/device-server">Device Server</a>. Communication
+with this service is handled by the <a href="./web-reference/module-remote.html">remote.js library</a>.
+</p>
+
+<p>
+The map component downloads tiles from <a href="http://maps.stamen.com/">maps.stamen.com</a>.
+</p>
+
+<p>
+Finally, the <a href="http://openrouteservice.org">OpenRouteService</a> is used to interpolate location
+updates between any two actual readings.  The API key for this
+services is managed by the <a href="./web-reference/module-credentials.html">credentials.js</a> library.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd496d68" class="outline-2">
+<h2 id="orgd496d68"><span class="section-number-2">7</span> Glossary</h2>
+<div class="outline-text-2" id="text-7">
+<dl class="org-dl">
+<dt>Native Component</dt><dd>a native platform application which gives
+access to low level functionality</dd>
+<dt>Android Native Component</dt><dd>the android app which acts as a native
+component.</dd>
+<dt>Web Component</dt><dd>main web application</dd>
+<dt>Native adapter</dt><dd>library in the web component which implements
+communication channels with the Native component</dd>
+<dt>Android native adapter</dt><dd>a native adapter for the Android Native component</dd>
+<dt>Web native adapter</dt><dd>a native adapter used when the app is run
+without a native component. It simulates the existence of a native
+component, making use of web APIs to replace functionality where
+possible (ie. for location updates).</dd>
+<dt>DetectionService</dt><dd>a service running in the native component which
+captures data needed for intersection compilation.</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2020-10-29 Thu 09:38</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
