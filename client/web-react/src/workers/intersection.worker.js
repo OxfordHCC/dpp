@@ -1,3 +1,7 @@
+/**
+   Compute intersections between location readings and devices.
+*/
+
 import { 
 	latLongToCartesian, 
 	getIntersections, 
@@ -17,17 +21,6 @@ onmessage = (evt) => {
 		{},
 		cartesianToLatLong(point.x, point.y, stdPll)
 	);
-
-	/*const cartesianEntries = entries.map(toCartesian);
-	
-	const paths = cartesianEntries.reduce((acc, curr, i, src)=>{
-		if(i === 0){
-			return acc;
-		}
-		let last = src[i-1];
-		acc.push([last, curr]);
-		return acc;
-		}, []);*/
 
 	const paths = entries.map(toCartesian)
 		  .reduce((acc, curr, i, src) => {

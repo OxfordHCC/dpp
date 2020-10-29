@@ -1,25 +1,50 @@
+/**
+   @module location
+*/
+
 import db from './store.js';
 import { last } from './util';
 import L from 'leaflet';
 
 let lastPosition;
+let sharedCompressionWorker;
+let sharedIntersectionWorker;
+
+/**
+   Get last known position
+*/
 export async function getLastPosition(){
 	return lastPosition || (await db.location.limit(1).last());
 }
 
-function storeLastPosition(pos){
+function cacheLastPosition(pos){
 	lastPosition = pos;
 }
 
-let sharedCompressionWorker;
 function getCompressionWorker(){
 	if(!sharedCompressionWorker){
-		sharedCompressionWorker = new Worker('../workers/compression.worker.js', { type: 'module' });
+		sharedCompressionWorker = new Worker(
+			'../workers/compression.worker.js',
+			{ type: 'module' }
+		);
 	}
 	return sharedCompressionWorker;
 }
 
-//TODO: rename to "simplify" (or smth else)
+function getIntersectionWorker(){
+	if(!sharedIntersectionWorker){
+		sharedIntersectionWorker = new Worker(
+			'../workers/intersection.worker.js',
+			{ type: 'module' }
+		);
+	}
+	return sharedIntersectionWorker;
+}
+
+
+/**
+   Compress latlon points
+*/
 export function compressPoints(points){
 	if(!points || points.length === 0){ 
 		return []; 
@@ -40,14 +65,6 @@ export function compressPoints(points){
 	});
 }
 
-
-let sharedIntersectionWorker;
-function getIntersectionWorker(){
-	if(!sharedIntersectionWorker){
-		sharedIntersectionWorker = new Worker('../workers/intersection.worker.js', {type: 'module'});
-	}
-	return sharedIntersectionWorker;
-}
 
 function computeIntersections(entries, devices){
 	if(!entries || entries.length === 0 || !devices || devices.length === 0){ 
@@ -70,35 +87,10 @@ function computeIntersections(entries, devices){
 	});
 }
 
-//deprecated, please use the newer bulkPut function
-async function deprecated_put(pos){
-	console.trace("DEPRECATED METHOD");
-	let scWorker = getCompressionWorker();
-	let channel = new MessageChannel();
-	let lastPos = await getLastPosition();
-	if(!lastPos){
-		return storeLastPosition(pos);
-	}
-
-	let inEntries = [lastPos, pos];
-	channel.port1.onmessage = msg => {
-		if(msg.data.event === 'done'){
-			let outEntries = msg.data.entries;
-			if(outEntries.length === 1){
-				//entries were compressed, so update the last entry
-				console.log('overwritting last position');
-				lastPos.latitude = outEntries[0].latitude;
-				lastPos.longitude = outEntries[0].longitude;
-				return storeLastPosition(lastPos);
-			}
-			//the new entry is different enough to warrant a new, separate entry
-			storeLastPosition(pos);
-		}
-	}
-	scWorker.postMessage({entries: inEntries, port: channel.port2}, [channel.port2]);
-}
-
-//should probably just rename to put and remove old put
+/**
+   Compress and store new location entries.
+   @return {Promise<Array>} stored entries
+*/
 async function bulkPut(entries){
 	const lastPos = await getLastPosition();
 	if(lastPos){
@@ -107,19 +99,20 @@ async function bulkPut(entries){
 	
 	const simplified = await compressPoints(entries);
 	await db.location.bulkPut(simplified);
-	await storeLastPosition(last(simplified));
+	await cacheLastPosition(last(simplified));
 	return simplified;
 }
 
-//leaflet uses 3 (THREE) different _mostly_ interchangeable formats for coordinates: {lat, lon}, {lat, lng} and [lat, lon]
-//something else that I can't seem to recall rn uses a 4th format (the [lon,lat])
-//while our indexeded db uses a 5th format ({ latitude, longitude }) because... it was created before I realised the disaster.
-//Basically it's hell. I keep refactoring these, but I always end up with more than I wish for. At some point will do it properly, but it will require changes across multiple platforms and so I keep deferring it.
 export const objToLonLat = ({ longitude, latitude }) => ([ longitude, latitude ]);
 export const objToLatLon = ({ longitude, latitude }) => ([ latitude, longitude ]);
 export const lonLatToObj = ([ longitude, latitude ]) => ({ longitude, latitude });
 export const LatLngToLatLon = ({lat, lng}) => ([lat, lng]);
 
+/**
+   @param {Number} startMs Start Unix timestamp in milliseconds
+   @param {Number} endMs End Unix timestamp in milliseconds
+   @return {Array<Location>} array of location readings
+*/
 function getLocationHistory(startMs, endMs){
 	return db.location
 		.where('timestampMs')
@@ -127,6 +120,11 @@ function getLocationHistory(startMs, endMs){
 		.toArray();
 }
 
+/**
+   @param objArr
+   @param opts
+   @return {} bounds
+*/
 function getBoundsArray(objArr, opts){
 	if(!objArr || objArr.length === 0){
 		return undefined;

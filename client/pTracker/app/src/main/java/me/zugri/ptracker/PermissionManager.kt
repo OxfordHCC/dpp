@@ -41,14 +41,23 @@ class PermissionManager(val activity: Activity) {
         )
     }
 
-    public fun callback(requestCode: Int, permissions: Array<String?>, grantResults: IntArray){
-        val cb = callbackMap[requestCode]
-        Lumber.log("Permission callback $requestCode called. Grant Results: $grantResults")
-        when {
-            grantResults.isEmpty() -> { // If user interaction was interrupted, the permission request is cancelled
-                Lumber.log("User interaction was cancelled.")
+    public fun callback(
+		requestCode: Int,
+		permissions: Array<String?>,
+		grantResults: IntArray){
+
+		val cb = callbackMap[requestCode]
+
+		when {
+            grantResults.isEmpty() -> {
+				// If user interaction was interrupted, the permission
+				// request is cancelled
+
+				Lumber.log("User interaction was cancelled." +
+						   " Permission request cancelled.")
             }
-            grantResults[0] == PackageManager.PERMISSION_GRANTED -> { // Permission was granted.
+            grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
+				// Permission was granted.
                 cb?.first!!()
                 //mService?.requestLocationUpdates()
             }
@@ -57,16 +66,17 @@ class PermissionManager(val activity: Activity) {
 
             }
         }
-
     }
 
-    fun getOrFailPermissions(permissions: Array<String>, onSuccess: () -> Unit, onError: () -> Unit){
-        Lumber.log("Requesting permissions")
+    fun getOrFailPermissions(
+		permissions: Array<String>,
+		onSuccess: () -> Unit,
+		onError: () -> Unit){
 
         if(permissionGranted(permissions)){
-            Lumber.log("permissions granted")
             return onSuccess()
         }
+		
         val randomInt = Random.nextInt(65536)
 
         val onceSuccess:() -> Unit = {
@@ -102,9 +112,11 @@ class PermissionManager(val activity: Activity) {
         requestPermissionsWithRationale(permissions, randomInt)
     }
 
-    private fun requestPermissionsWithRationale(permissions: Array<String>, reqCode: Int){
+    private fun requestPermissionsWithRationale(
+		permissions: Array<String>,
+		reqCode: Int){
+		
         if (shouldProvideRationale(permissions)) {
-            Lumber.log("Displaying permission rationale to provide additional context")
             Snackbar.make(
                 activity.findViewById<View>(R.id.activity_main),
                 R.string.permission_rationale,

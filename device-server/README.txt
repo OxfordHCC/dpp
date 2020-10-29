@@ -1,8 +1,8 @@
 = Device Server
 
 
-This is a simple server for:
-a) crowdosourced location-bound devices*
+This server handles:
+a) serving of crowdosourced location-bound devices*
 b) proxying routing requests for the demo page to openrouteservice **
 
 

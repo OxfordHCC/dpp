@@ -1,8 +1,18 @@
+/**
+   @module openroute
+
+*/
+
 import credentials from './credentials.js';
 import { objToLonLat, lonLatToObj } from './location';
 import { chunk, flatten } from './util.js';
 import db from './store';
 
+/**
+   Request direction from openroute service
+   @param {Array} coordinates Points through which the route must pass
+   @return {Array} 
+*/
 
 async function directionsRequest(coordinates){
 	
@@ -29,6 +39,9 @@ async function directionsRequest(coordinates){
 	.then(data => data.features[0].geometry.coordinates);
 }
 
+/**
+   Interpolate location entries by requesting directions from the openroute service
+*/
 async function interpolateLocation(coordinates){
 	if(coordinates.length < 2){
 		return coordinates;
@@ -37,10 +50,15 @@ async function interpolateLocation(coordinates){
 	return Promise.all(chunk(40, coordinates).map(directionsRequest)).then(flatten);
 }
 
-//TODO: there seems to be a bug with time estimation... need to investigate
+
+/**
+   
+   @param {Array<LatLon>} recorded
+   @todo: there seems to be a bug with time estimation... need to investigate
+*/
 function estimateTimestampsNSquared(recorded, estimated){
-	//this is not euclidean distance, but it's just good enough to determine minimum distance between points
-	//(i hope)
+	// this is not actual _distance_, but it's just good enough to
+	// determine minimum distance between points... i hope
 	const distance = (a, b) => (a.latitude - b.latitude) * (a.latitude - b.latitude) 
 							+ (a.longitude - b.longitude) * (a.longitude - b.longitude);
 	let r = 1;
@@ -56,11 +74,18 @@ function estimateTimestampsNSquared(recorded, estimated){
 				r = j;
 			}
 		}
-		interpolateTimestamp(estimated, l, r, recorded[i-1].timestampMs, recorded[i].timestampMs);
+		interpolateTimestamp(
+			estimated,
+			l,
+			r,
+			recorded[i-1].timestampMs,
+			recorded[i].timestampMs);
+		
 		l = r;
 	}
 	return estimated;
 }
+
 
 function interpolateTimestamp(entries, l, r, t1, t2){
 	const n = r - l || 1;
@@ -75,6 +100,11 @@ function estimateTime(recorded, estimated){
 	return estimateTimestampsNSquared(recorded, estimated);
 }
 
+/**
+   Estimate route that passes through all entries.
+   @param {Array} entries
+   @param {Boolean} doEstimateTime
+*/
 async function estimatePath(entries, doEstimateTime = true){
 	entries = entries.filter(x => x !== null && x !== undefined);
 	if(!entries || entries.length === 0){
@@ -86,17 +116,11 @@ async function estimatePath(entries, doEstimateTime = true){
 	const estimated = (await interpolateLocation(lonlats)).map(lonLatToObj);
 	
 	if(doEstimateTime){
-		estimateTime(entries, estimated); //this changes the estimated array
+		// this changes the estimated array
+		estimateTime(entries, estimated);
 	}
 	
 	return estimated;
 }
 
-async function getHistory(from, to){
-	return db.openroute
-		  .where('timestampMs')
-		  .between(from, to)
-		  .toArray();
-}
-
-export default { estimatePath, getHistory };
+export default { estimatePath };

@@ -1,6 +1,33 @@
-//TODO: Capitalize point param names
+/**
+   @module geometry
+*/
 
-//Get projection of point t on a line (a, b): a line that goes through a and b
+/**
+   @typedef {Object} LatLong
+   @property {Number} latitude
+   @property {Number} longitude
+*/
+/**
+   @typedef {Object} CartesianCircle
+   @property {Number} x - x coordinate
+   @property {Number} y - y coordinate
+   @property {Number} r - radius of circle
+*/
+/**
+   @typedef {Object} Point
+   @property {Number} x - x coordinate
+   @property {Number} y - y coordinate
+*/
+/**
+   @typedef {Object} Segment
+   @property {Point} A - One end of the segment
+   @property {Point} B - Other end of the segment
+*/
+
+/**
+* Get projection of point t on a line(a, b): a line that goes through
+* a and b
+*/
 export function pointProjectionOnLine(t, [a, b]){
 	//let s be the slope of line (a, b)
 	let s = (a.y - b.y) / (a.x - b.x);
@@ -25,11 +52,14 @@ export function pointProjectionOnLine(t, [a, b]){
 	return {x, y};
 }
 
-//given two overlapping circles, get the middle point of their intersection.
-//c1 - {x, y, r} -> coords and radius of circle 1
-//idm c2
-//d - optional distance param to avoid computing again:
-//usually if this function is called, it's because the distance has been calculated before.
+/**
+   Given two overlapping circles, get the middle point of their
+   intersection.  
+   @param {CartesianCircle} c1 - x,y coords and radius of circle 1
+   @param {CartesianCircle} c2 - x,y coords and radius of circle 2
+   @d - optional distance param to avoid computing again: somtimes
+   distance is calculated before this function is called.
+*/
 export function getMedianIntersection(c1, c2, d){
 	d = d || distanceCartesian(c1, c2);
 	let segment = getIntersectionSegment(c1, c2, d);
@@ -42,14 +72,30 @@ export function getMedianIntersection(c1, c2, d){
 export function getIntersectionSegment(c1, c2, d){
 	const s = c1.r + c2.r - d;
 	const l = c1.r - s;
-	const k = c2.r - s; //why am I not using this? TODO:investigate
-	const uc1c2 = [(c2.x - c1.x) / d, (c2.y - c1.y) / d]; //unit vector from c1 to c2
-	const uc2c1 = uc1c2.map(c => -c); //invert unit vector (unit vector from c2 to c1)
+	const k = c2.r - s; //TODO: why compute k?
+
+	// unit vector from c1 to c2
+	const uc1c2 = [(c2.x - c1.x) / d, (c2.y - c1.y) / d];
+
+	// invert unit vector (unit vector from c2 to c1)
+	const uc2c1 = uc1c2.map(c => -c); 
+
 	const a = {x: c1.x + l * uc1c2[0], y: c1.y + l * uc1c2[1]};
 	const b = {x: c2.x + l * uc2c1[0], y: c2.y + l * uc2c1[1]};
 	return [a, b];
 }
 
+
+/**
+   Convert latitude and longitutude to cartesian point
+   using equirectangular projection.
+ 
+   @see {@link https://en.wikipedia.org/wiki/Equirectangular_projection}
+   @todo Combine lat and long params into single {LatLong} param
+   @params {Number} lat
+   @params {Number} long
+   @returns {Point}
+*/
 export function latLongToCartesian(lat, long, lat0){
 	if(!lat0){
 		lat0 = lat;
@@ -63,6 +109,14 @@ export function latLongToCartesian(lat, long, lat0){
 	return {x, y};
 }
 
+/**
+   Reverse of latLongToCartesian. Note that the same standard parallel
+   should be used when converting back to latlong
+   
+   @param {Point} x
+   @param {Point} y
+   @param {Number} lat0 - standard parallel
+*/
 export function cartesianToLatLong(x, y, lat0){
 	const R = 6371e3; 
 	const lat0Rad = lat0 * (Math.PI/180);
@@ -73,10 +127,12 @@ export function cartesianToLatLong(x, y, lat0){
 	return {latitude, longitude};
 }
 
-/*
-DISTANCE BETWEEN POINTS
+/**
+   Euclidean distance
+   @param {Point} a 
+   @param {Point} b
+   @returns {Number} distance
 */
-//naive pythagora for flat earthers
 export function distanceCartesian(a, b){
 	let v = a.y - b.y;
 	let u = a.x - b.x;
@@ -108,8 +164,13 @@ export function distanceLatLongHaversine(A, B){
 	return d;
 }
 
-//given point P on a line and [A, B] a segment on the same line, is P between
-//segment bounds?
+/**
+  Given point P on a line and a segment AB on the same line, is P
+  between segment bounds?
+  @param {Point} P 
+  @param {Segment} AB
+  @returns {Boolean}
+*/
 export function isPointBetween(P, [A, B]){
 	let dotProd = (A.x - P.x) * (A.x - B.x) + (A.y - P.y) * (B.y - A.y);
 	if(dotProd < 0){
@@ -124,6 +185,13 @@ export function isPointBetween(P, [A, B]){
 	return true;
 }
 
+/**
+   @param {CartesianCircle} C1
+   @param {Number} r1
+   @param {CartesianCircle} C2
+   @param {Number} r2
+   @returns {Boolean}
+*/
 export function isCircleIntersectingCircle(C1, r1 ,C2 , r2){
 	if(distanceCartesian(C1, C2) > r1 + r2){
 		return false;
@@ -131,8 +199,14 @@ export function isCircleIntersectingCircle(C1, r1 ,C2 , r2){
 	return true;
 }
 
-//given a circle with center at point C and radius r, and a segment [A, B], 
-//does the segment ntersect the circle?
+/**
+   Given a circle with center at point C and radius r, and a segment [A, B]
+   @todo Combine C and r parameters into Circle
+   @param {Point} C
+   @param {Number} r
+   @param {Segment} AB
+   @returns {Boolean} 
+*/
 export function isSegmentIntersectingCircle(C, r, [A, B]){
 	//if any of the segment ends is inside circle, then it's intersecting
 	if(distanceCartesian(A, C) < r){
@@ -164,13 +238,24 @@ export function isSegmentIntersectingCircle(C, r, [A, B]){
 	return true;
 }
 
-//given an array of paths and an array of circles, return their intersections
+/**
+   Given an array of paths and an array of circles, return their
+   intersections
+   @param {Segment[]} paths
+   @param {CartesianCircle[]} devices
+   @returns {Object[]} Array of objects describing intersections
+*/
 export function getIntersections(paths, devices){
 	let res = [];
 	for(let i = 0, n = paths.length; i < n; i++){
 		for(let j = 0, m = devices.length; j < m; j++){
 			if(isSegmentIntersectingCircle(devices[j], devices[j].r, paths[i])){
-                res.push({device: devices[j], path: paths[i], pathIndex: i, deviceIndex: j})
+                res.push({
+					device: devices[j],
+					path: paths[i],
+					pathIndex: i,
+					deviceIndex: j
+				})
 			}
 		}
 	}

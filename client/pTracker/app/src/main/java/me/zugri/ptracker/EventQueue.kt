@@ -6,13 +6,17 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import org.json.JSONObject
 
-//The event queue is used to queue up events from background services that would've otherwise been
-//sent to WebView. When the app returns to foreground, it flushes events
+//The event queue is used to queue up events from background services
+//that would've otherwise been sent to WebView. When the app returns
+//to foreground, it flushes events.
 
 private const val DATABASE_NAME = "event_queue"
 private const val DATABASE_VERSION: Int = 1 //needs to be Int
 
-class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class DBHelper(context: Context) : SQLiteOpenHelper(context,
+													DATABASE_NAME,
+													null, DATABASE_VERSION
+) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE EventQueue (" +
                 "timestamp INTEGER, " +
@@ -22,15 +26,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
     //on upgrade, just throw everything away :D
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS location")
+        db.execSQL("DROP TABLE IF EXISTS EventQueue")
         onCreate(db)
     }
 }
 
 class EventQueue(context: Context) {
     private var dbHelper: DBHelper = DBHelper(context.applicationContext)
-    //TODO: switch these two around. Make the default addEvent insert a list of events and make the
-    //single event function overload call that, for performance purposes (ie single sqlite call).
+    //TODO: switch these two around. Make the default addEvent insert
+    //a list of events and make the single event function overload
+    //call that (for performance purposes, ie single sqlite call).
     fun addEvent(event: WVEvent){
         Lumber.log("eventQueue: adding ${event.type}")
         var wDb = dbHelper.writableDatabase

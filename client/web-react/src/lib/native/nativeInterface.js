@@ -1,3 +1,7 @@
+/**
+   @module native interface
+*/
+
 import {
 	last
 } from '../util.js';
@@ -50,9 +54,10 @@ async function locationUpdate(events){
 	try{
 		const latestEvent = last(locations);
 		const openroutes = await openroute.estimatePath([lastLocation, ...locations]);
-		const deviceBounds = location.getBoundsArray(openroutes, { pad: 0.1, min: 500 });
+		const deviceBounds = location.getBoundsArray(openroutes, {
+			pad: 0.1, min: 500
+		});
 		const devices = await device.getAround(deviceBounds);
-
 
 		//intersections calculated using the new location updates
 		const newIntersections = (await location.computeIntersections(openroutes, devices))
@@ -61,7 +66,6 @@ async function locationUpdate(events){
 				  //mark intersections computed using last location as open
 				  endMs: (inx.path[1].timestamp === latestEvent.timestamp)? -1 : inx.endMs
 			  }));
-
 		
 		//existing intersections
 		const oldIntersections = (await intersection.getCurrent())
@@ -70,9 +74,6 @@ async function locationUpdate(events){
 				  ...inx,
 				  endMs: inx.path[1].timestamp
 			  }));
-
-//		const toClose = oldInxs.filter(notIn(newInxs));
-//		const toAdd = newInxs.filter(notIn(oldInxs));
 	
 		await intersection.bulkPut([...oldIntersections, ...newIntersections]);
 		store.dispatch(refreshCurrent());
@@ -112,16 +113,38 @@ function handleMessage({ type, data }){
 	throw "message type unknown";
 }
 
+/**
+   
+   The nativeInterface object wraps a native adapter to provide a
+   common API for other libraries to interact with the native
+   component.
+   
+ */
 const nativeInterface = native => {
 	const sendMessage = (type, data) => native.send({ type, data });
 	native.setMessageHandler(handleMessage);
 	sendMessage(WEBVIEW_READY);
 
 	return {
+		/**
+
+		   Get list of registered DetectionServices.
+
+		 */
 		getServices: () => sendMessage(GET_DETECTION_SERVICES),
 		settings: {
+			/**
+			   
+			   Toggle DetectionService.
+
+			 */
 			toggleService: id => sendMessage(TOGGLE_DETECTION_SERVICE, { id })
 		},
+		/**
+		   
+		   Trigger UDP sync.
+		   
+		 */
 		syncUDP: (entries) => sendMessage(SYNC_UDP, { entries })
 	}
 }

@@ -1,8 +1,15 @@
-//API keys and such
+/**
+   @module credentials 
+*/
 import db from './store.js';
 const API_AUTH_TYPE = 'api-auth';
+
+// memory store for quick retrieval of keys. Keys are stored here on
+// app startup and subsequent calls to retrieve api keys will retrieve
+// them from here
 const apiKeys = {};
 
+// promise that resolves once keys have been retrieved from indexeddb
 const apiKeyInitialization = new Promise(async (resolve, reject) => {
     try{
         (await db.meta.toArray())
@@ -17,23 +24,34 @@ const apiKeyInitialization = new Promise(async (resolve, reject) => {
     }
 }).catch(err => {
 	console.error("error happened while initialising credentials", err);
-})
+});
 
+/**
+   Get API key of external service
+   @param {String} service - id of service
+   @returns {String} API key
+*/
 async function getKey(service){
 	await apiKeyInitialization;
 	return apiKeys[service];
 }
 
-function setKey(service, key){
-	return db.meta.put({
+/**
+   Set API key of external service
+   @async
+   @param {String} service
+   @param {String} key
+   @returns {Promise<Null>}
+*/
+async function setKey(service, key){
+	await db.meta.put({
         id: `${API_AUTH_TYPE}-${service}`,
 		type: API_AUTH_TYPE,
 		service,
 		key
 	})
-	.then(() => {
-		apiKeys[service] = key;
-	});
+	
+	apiKeys[service] = key;
 }
 
 export default { setKey, getKey };

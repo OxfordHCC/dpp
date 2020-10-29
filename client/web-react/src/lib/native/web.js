@@ -1,3 +1,6 @@
+/**
+   @module web adapter
+*/
 import { LOCATION_UPDATE } from './nativeInterface';
 import MockInterface from "./mock.js";
 

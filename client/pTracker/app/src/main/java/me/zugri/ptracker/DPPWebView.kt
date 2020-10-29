@@ -19,7 +19,11 @@ import kotlinx.serialization.json.*
 
 data class WVCallback(val onSuccess: ((Any) -> Unit)?, val onError: ((Any) -> Unit)?)
 
-class DPPWebView(context: Context, private val serviceManager: ServiceManager) : WebView(context) {
+class DPPWebView(
+	context: Context,
+	private val serviceManager: ServiceManager
+) : WebView(context) {
+	
     var loadedWeb = false;
     var eventEmitter: EventEmitter
     var callbackMap: HashMap<String, WVCallback> = HashMap()
@@ -42,14 +46,22 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
 
         eventEmitter = EventEmitter.getInstance(context)
         eventEmitter.bindWebView(this)
-        Lumber.log("DPP WebView loaded")
+        Lumber.log("DPP WebView loaded.")
     }
 
-    fun sendEvent(event: WVEvent, onError:((Any) -> Unit)? = null, onSuccess:((Any) -> Unit)? = null){
+    fun sendEvent(
+		event: WVEvent,
+		onError:((Any) -> Unit)? = null,
+		onSuccess:((Any) -> Unit)? = null
+	){
         return sendEvent(listOf(event), onError, onSuccess)
     }
 
-    fun sendEvent(events: List<WVEvent>, onError: ((Any) -> Unit)? = null, onSuccess:((Any) -> Unit)? = null){
+    fun sendEvent(
+		events: List<WVEvent>,
+		onError: ((Any) -> Unit)? = null,
+		onSuccess:((Any) -> Unit)? = null
+	){
         try {
             val jsonArr = JSONArray(events.map{ it.toJSONObject() })
             val id = UUID.randomUUID().toString()
@@ -79,7 +91,12 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
         }
     }
 
-    private fun doReply(message: JSONObject, error: JSONObject?, data: Any?): JSONObject{
+	
+    private fun doReply(
+		message: JSONObject,
+		error: JSONObject?,
+		data: Any?
+	): JSONObject {
         return JSONObject("""{
             id: ${message["id"]},
             type: "reply",
@@ -98,6 +115,11 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
         return doReply(message, null, data)
     }
 
+	/**
+	 
+	 Send message to Web Component.
+	 
+	 */
     private fun sendMessage(message: JSONObject){
         try {
             Lumber.log("sendMessage : $message")
@@ -111,7 +133,6 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
 
     private fun handleReply(message: JSONObject){
         Lumber.log("handle reply to ${message["id"]}, error: ${message.has("error")}")
-        Lumber.log("${message["id"]}: $message")
         val callback = callbackMap[message["id"]] ?: return
 
         if(message.has("error")){
@@ -161,22 +182,32 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
         }
 
         if(type == "test") {
-            return sendMessage(replyData(message, JSONObject("{ data: ${message["data"]} }")))
+            return sendMessage(
+				replyData(
+					message,
+					JSONObject("{ data: ${message["data"]} }")
+				)
+			)
         }
 
         if(type == "sync_udp"){
             try {
                 val udpService = serviceManager.getService("udp") as UDPService
-                val msg = jsonx.parse(SyncUDPMessage.serializer(), message["data"].toString())
-                Lumber.log("entries length: ${msg.entries.size}")
+                val msg = jsonx.parse(
+					SyncUDPMessage.serializer(),
+					message["data"].toString()
+				)
+				
                 udpService.sync(msg.entries)
+				
+				//send emtpy reply as ack
                 sendMessage(replyData(message, JSONObject()))
             }catch(e: Exception){
                 sendMessage(replyError(message, JSONObject("{ \"error\": \"$e\" }")))
             }
         }
 
-        if(type == WVEvent.WEBVIEW_READY){
+        if(type == "WEBVIEW_READY"){
             handleWebViewReady(message)
         }
 
@@ -185,7 +216,12 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
 
     private fun receiveMessage(message: JSONObject){
         if(!message.has("id")){
-            return sendMessage(replyError(message, JSONObject("{ message: \"Malformed message. Missing id.\"}")))
+            return sendMessage(
+				replyError(
+					message,
+					JSONObject("{ message: \"Malformed message. Missing id.\"}")
+				)
+			)
         }
 
         try{
@@ -193,18 +229,26 @@ class DPPWebView(context: Context, private val serviceManager: ServiceManager) :
             if(type == "reply"){
                 return handleReply(message)
             }
-            handleNew(message)
-//            result?.let { sendMessage(reply(message, null, result))  }
+            return handleNew(message)
         }catch(error: Error){
-            sendMessage(replyError(message, JSONObject("{ message: \"${error.message}\" }")))
+            return sendMessage(
+				replyError(
+					message,
+					JSONObject("{ message: \"${error.message}\" }")
+				)
+			)
         }
-        return
     }
 
+	/**
+	 
+	 Object to be injected in the WebView. The methods defined here
+	 will be callable from inside the web component.
+	 
+	 */
     private inner class JsObject{
         @JavascriptInterface
         fun sendMessage(message: String){
-            Lumber.log("JS Interface message: $message")
             return receiveMessage(JSONObject(message))
         }
     }

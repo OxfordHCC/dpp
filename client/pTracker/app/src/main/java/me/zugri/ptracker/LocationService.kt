@@ -12,7 +12,8 @@ class LocationService : DetectionService() {
     private val mBinder: IBinder = LocalBinder()
     private lateinit var mNotificationManager: NotificationManager
 
-    //Contains parameters used by [com.google.android.gms.location.FusedLocationProviderApi].
+    //Contains parameters used by
+    //[com.google.android.gms.location.FusedLocationProviderApi].
     private var mLocationRequest: LocationRequest? = null
 
     //Provides access to the Fused Location Provider API.
@@ -46,38 +47,32 @@ class LocationService : DetectionService() {
         mNotificationManager = NotificationCreator.getNotificationManager()
     }
 
-    // Called when a client (MainActivity in case of this sample) comes to the foreground
-    // and binds with this service. The service should cease to be a foreground service
-    // when that happens.
+    // Called when the app binds to the service for the first time.
     override fun onBind(intent: Intent): IBinder {
-        Lumber.log( "in onBind()")
         inForeground = false
         return mBinder
     }
 
-    // Called when a client (MainActivity in case of this sample) returns to the foreground
-    // and binds once again with this service. The service should cease to be a foreground
-    // service when that happens.
+	//Called when the app returns to foreground and rebinds.
     override fun onRebind(intent: Intent) {
-        Lumber.log( "in onRebind()")
         stopForeground(true)
         inForeground = false
         super.onRebind(intent)
     }
 
     override fun onUnbind(intent: Intent): Boolean {
-        Lumber.log( "Last client unbound from location service")
-        Lumber.log( "Starting foreground service")
+        Lumber.log("Last client unbound from location service")
+        Lumber.log("Starting foreground service")
         startForeground(
             NotificationCreator.NOTIFICATION_ID,
             NotificationCreator.getNotification(this, null)
         )
         inForeground = true
-        return true // Ensures onRebind() is called when a client re-binds.
+        return true // Ensures onRebind() is called when a client rebinds.
     }
 
     override fun onDestroy() {
-        Lumber.log("service onDestroy")
+		Lumber.log("Destroyed")
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -88,23 +83,23 @@ class LocationService : DetectionService() {
                 Looper.myLooper()
             )
             status = true
-        } catch (unlikely: SecurityException) {
-            Lumber.err("Lost location permission. Could not request updates. $unlikely")
+        } catch (e: SecurityException) {
+            Lumber.err("Lost location permission. Could not request updates: $e")
         }
 
         // If we get killed, after returning from here, restart
         return START_STICKY
     }
 
-    //Makes a request for location updates.
-    //TODO: Handle error
+    // Makes a request for location updates.
+    // TODO: Handle error
     private fun requestLocationUpdates() {
         Lumber.log( "Requesting location updates")
         startService(Intent(applicationContext, LocationService::class.java))
     }
 
-    //Removes location updates.
-    //TODO: handle error
+    // Removes location updates.
+    // TODO: handle error
     private fun removeLocationUpdates() {
         Lumber.log( "Removing location updates")
         try {
@@ -183,11 +178,12 @@ class LocationService : DetectionService() {
         private const val PACKAGE_NAME = "dpp"
         const val EXTRA_STARTED_FROM_NOTIFICATION = "${PACKAGE_NAME}.started_from_notification"
 
-        //The desired interval for location updates. Inexact. Updates may be more or less frequent.
+        //The desired interval for location updates. Inexact. Updates
+        //may be more or less frequent.
         private const val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
 
-        //The fastest rate for active location updates. Updates will never be more frequent
-        //than this value.
+        //The fastest rate for active location updates. Updates will
+        //never be more frequent than this value.
         private const val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
     }
 

@@ -1,9 +1,10 @@
-//reduce entries by joining two adjacent inersecting location readings into a single one
-//the center of the new location reading will be the halway point between the two intersecting
-//readings. The resulting radius is the smallest of the two.
-
-//on message, filter and group by date.
-// importScripts('geometry.js');
+//reduce entries by joining two adjacent inersecting location readings
+//into a single one. The center of the new location reading will be the
+//halfway point between the two intersecting readings. The resulting
+//radius is the smallest of the two radiuses.
+/**
+   Test
+*/
 
 import { 
 	latLongToCartesian,

@@ -104,7 +104,7 @@ export default class Map extends React.Component{
     }
 
     componentDidMount(){
-		
+
         const longPress = {
             timeout: null,
             threshold: 300

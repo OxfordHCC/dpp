@@ -1,16 +1,18 @@
+/**
+   @module util
+*/
 
-//helper function for assigning classes on react components
-/*Example usage (settings.jsx)
-<a id="back-button" href="#settings" onClick={hidePage}
-   className={classObj({
-	   "back-link": true,
-	   "hidden": subtitle === null
+
+/**
+   Helper function for assigning classes on react/jsx components
+
+   @example 
+   <a className={classObj({
+   "back-link": true,
+   "hidden": subtitle === null
    })}>
-
-  <i className="m-i">navigate_before</i>
-  Back
-
-</a>
+   
+   @returns {Object} class object
 */
 export function classObj(style){
 	return Object.entries(style)
@@ -19,30 +21,44 @@ export function classObj(style){
 		.join(' ');
 }
 
-function noopTag(t) {
-	for (var o = [t[0]], i = 1, l = arguments.length; i < l; i++){
-		o.push(arguments[i], t[i]);
-	}
-	return o.join('').trim();
-}
 
-//copied from so
+/**
+   Generate random uuidv4
+   @return {String} uuidv4 
+*/
 export function uuidv4() {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
 
+
 export function last(arr){
 	return arr[arr.length-1];
 }
+
 
 export function first(arr){
 	return arr[0];
 }
 
-export function groupBy(key, data){
-	let keyFn = key;
+/**
+   Group array entries by key.  
+   
+   @example
+   grouped = groupBy('name', someArr)
+
+   @example 
+   // The data parameter can be left out to return a function
+   which can be executed on data at a later time.
+   
+   arrOfGrouped = someArrOfArr.map(groupBy('name'))
+
+   @param {String | Function} keyFn
+   @param {Array} data
+   @return {Object}
+*/
+export function groupBy(keyFn, data){
 	if(typeof keyFn === "string"){
 		keyFn = x => x[key];
 	}
@@ -54,12 +70,23 @@ export function groupBy(key, data){
 			return acc;
 		},{});
 	}
+
+	//allow curried call
 	if(!data){
 		return doGroupBy;
 	}
+	
 	return doGroupBy(data);
 }
 
+
+/**
+   Split array into multiple arrays of size _size_
+   
+   @param {Number} size Chunk size
+   @param {Array} arr
+   @return {Array<Array>}
+*/
 export function chunk(size, arr){
 	function doChunk(arr){
 		return arr.reduce((acc, curr, i) => {
@@ -69,7 +96,8 @@ export function chunk(size, arr){
 			return acc;
 		},[]);
 	}
-	
+
+	// allow curry
 	if(!arr){
 		return doChunk;
 	}
@@ -77,8 +105,28 @@ export function chunk(size, arr){
 	return doChunk(arr);
 }
 
+/**
+   Pluck items from array indicated by indeces array.
+   @return {Object} plucked items
+*/
 export function pluck(indeces, fromArr){
 	return indeces.map(i => fromArr[i]);
+}
+
+/**
+   Flatten array one level
+   @return {Array} flattened array
+*/
+export function flatten(arr){
+	return arr.reduce((acc, curr)=> acc.concat(curr), []);
+}
+
+
+function noopTag(t) {
+	for (var o = [t[0]], i = 1, l = arguments.length; i < l; i++){
+		o.push(arguments[i], t[i]);
+	}
+	return o.join('').trim();
 }
 
 export function htmlCompile(t) {
@@ -114,8 +162,7 @@ export function cssCompile(t) {
 }
 
 
-//could use this instead:
-//(c)(opied from)https://gist.github.com/aishikaty/dcb6e7f3441c1c8321a34437139bf17f
+//(c)(opied from) https://gist.github.com/aishikaty/dcb6e7f3441c1c8321a34437139bf17f
 export function htmlEscape(strings, ...values){
   return Array.from(strings).map((string, index) => (
     string + (
@@ -132,14 +179,6 @@ export function deNormCoord(coord){ return coord/10000000; }
 
 export const html = noopTag;
 export const css = noopTag;
-
-//flatten one levelx
-export function flatten(arr){
-	return arr.reduce((acc, curr)=> acc.concat(curr), []);
-}
-
-//SHOULD BE DEPRECATED
-export const DEVICE_RADIUS = 33;
 
 export class Evented{
 	constructor(){
@@ -189,4 +228,4 @@ export const Unique = (field) => {
 	});
 }
 
-export default {gel, html, deNormCoord, DEVICE_RADIUS, chunk, Evented, cssCompile};
+export default {gel, html, deNormCoord, chunk, Evented, cssCompile};

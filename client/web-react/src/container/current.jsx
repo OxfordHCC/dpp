@@ -4,12 +4,6 @@ import CurrentIntersections from '../component/current-intersections';
 import searchIll from '../images/clip/clip-2.png';
 import { Header } from 'semantic-ui-react';
 
-/**
- * Main container shows currently intersecting controllers and the most recent
- * intersections.
- *  
- */
-
 const Current = ({ currentIntersections }) => {    
 
     const Content = () => {
@@ -36,7 +30,9 @@ const Current = ({ currentIntersections }) => {
             );
         }
         
-        return  <CurrentIntersections intersections={currentIntersections} withControls={true}/>;
+        return  <CurrentIntersections
+                  intersections={currentIntersections}
+                  withControls={true}/>;
     };
     
     return (

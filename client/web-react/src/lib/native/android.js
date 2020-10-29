@@ -1,3 +1,7 @@
+/**
+   @module android adapter
+*/
+
 import { uuidv4 } from "../util.js";
 
 export default class AndroidInterface{
@@ -18,7 +22,6 @@ export default class AndroidInterface{
 			(data && cb.resolve(data)) || (error && cb.reject(error));
 			delete this.callbackMap[message.id];
 		}
-		
 	}
 	
 	async receive(message){ //from native
@@ -38,10 +41,18 @@ export default class AndroidInterface{
 		}
 	}
 
+	// send message to native. If no id, generate a new uuid
 	send(message){ //to native
 		if(!("id" in message)){
 			message.id = uuidv4();
 		}
+
+		// if we're sending back a reply, just resolve the send call.
+		// We do not expect an answer back to this message.  if not a
+		// reply, create two promises and race them:
+		//	- one promise times out after options.timeout
+		//  - the other is stored in the callbackmap and gets resolved
+		//    when a reply for this message is received.
 		const promise = (message.type==='reply')?
 			  Promise.resolve() :
 			  Promise.race([

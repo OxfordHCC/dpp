@@ -18,22 +18,26 @@ import kotlinx.serialization.json.*
 import java.net.NetworkInterface
 
 
-//UDP service for detecting devices using UDP.
+// UDP service for detecting devices using UDP.
 
-// The current implementation requires devices to periodically transmit packets in order to signal
-//their presence.
+// The current implementation requires devices to periodically
+// transmit packets in order to signal their presence.
 
-//When a device is first detected, it gets added to a map and an event is sent to the event emitter.
-//Every Tc seconds, the service removes devices from the map that have not signaled since the
-//previous clean-up. When a device is removed, an event is transmitted to the event emitter.
+// When a device is first detected, it gets added to a map and an
+// event is sent to the event emitter.  Every Tc seconds, the service
+// removes devices from the map that have not signaled since the
+// previous clean-up. When a device is removed, an event is
+// transmitted to the event emitter.
 
-//This <enter, exit> pair of events describes the approximate window of time of interaction with the
-//device. This is similar to how GeoFencing exposes events on android. An alternative would be to
-//transmit <enter, exit> events based on network changes. We opted for the heartbeat version to
+// This <enter, exit> pair of events describes the approximate window
+// of time of interaction with the device. This is similar to how
+// GeoFencing exposes events on android. An alternative would be to
+// transmit <enter, exit> events based on network changes. We opted
+// for the heartbeat version to
 
-//the udp service listens for udp broadcasts on port 26843 (COVID)
-//Since the datagram socket is blocking, we need to start listening on a separate thread
-//Likewise, we create a spare thread for clean-up.
+// the udp service listens for udp broadcasts on port 26843 (COVID)
+
+
 class UDPService : DetectionService() {
     override val permissions: Array<String> = arrayOf()
     override val id: String = "udp"
@@ -95,19 +99,22 @@ class UDPService : DetectionService() {
     //every <Tc> seconds, remove all inactive, mark all active as inactive
 	fun cleanInactive(){
         Lumber.log("UDP: cleaning inactive devices")
-        //split into active/inactive
+        // split into active/inactive
 		val (active, inactive) = statusMap.keys.partition {
             statusMap[it] == true
         }
 
-        //compile exit events for inactive
+        // compile exit events for inactive
         val exitEvents = inactive.map { id -> createExitEvent(deviceMap[id]!!) }
-        //post events to webview
+
+		// post events to webview
         eventEmitter.post(exitEvents)
-        //remove from device map and status map
+
+		// remove from device map and status map
         deviceMap = deviceMap.filter{(key: String) -> active.contains(key) }.toMutableMap()
         statusMap = statusMap.filter{(key:String) -> active.contains(key)}.toMutableMap()
-        //mark remaining as inactive
+
+		// mark remaining as inactive
         statusMap = statusMap.mapValues{(key:String) -> false}.toMutableMap()
 	}
 
@@ -118,14 +125,15 @@ class UDPService : DetectionService() {
     override fun stop() {
         status = false
         stopSelf()
-        Lumber.log("UDP Service stopped")
+        Lumber.log("UDP Service stopped.")
     }
 
     override fun onCreate(){
         sharedPreferences = getSharedPreferences("udp", Context.MODE_PRIVATE)
         sharedPrefEditor = sharedPreferences.edit()
         val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        //acquiring multicast lock may not be needed
+
+		// acquiring multicast lock may not be needed
         multicastLock = wm.createMulticastLock("ptracker")
         multicastLock!!.setReferenceCounted(true)
         multicastLock!!.acquire()
@@ -172,6 +180,8 @@ class UDPService : DetectionService() {
         return true
     }
 
+	// Create separate thread for datagram socket, because listening
+	// will block
     inner class ListeningThread : Thread(){
         override fun run(){
             Lumber.log("UDP thread started")
@@ -205,14 +215,11 @@ class UDPService : DetectionService() {
         }
     }
 
+	// Create separate thread for clean-up so we can put it to sleep
+	// and adjust thus adjust the time between clean-up operations.
 	inner class CleanUpThread : Thread(){
 		override fun run(){
 			while(status){
-                /*var now = System.currentTimeMillis()
-                sharedPrefEditor.putLong("last_online", now)
-                sharedPreferences.apply(){
-                    eventEmitter.post(WVEvent("udp_heartbeat", now, JSONObject("")))
-                }*/
 				cleanInactive()
 				sleep(Tc)
 			}
@@ -227,7 +234,7 @@ class UDPService : DetectionService() {
             Manifest.permission.INTERNET,
             Manifest.permission.CHANGE_WIFI_MULTICAST_STATE
         )
-        const val PORT = 9000
+        const val PORT = 26843
 		const val Tc : Long = 1000*30 //30 seconds
     }
 }

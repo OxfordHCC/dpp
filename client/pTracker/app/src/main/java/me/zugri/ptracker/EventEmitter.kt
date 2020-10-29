@@ -7,9 +7,10 @@ import android.os.IBinder
 import android.util.EventLog
 import android.webkit.WebView
 
-//Acts like a buffer for events between webview and native. Different Services will want to send
-//events to an instance of this class.
-//It uses an EventQueue built on top of sqlite to store events while the app is in background.
+// Acts like a buffer for events between webview and native. Different
+// DetectionServices will want to send events to an instance of this
+// class.  It uses an EventQueue built on top of sqlite to store
+// events while the app is in background.
 class EventEmitter(context: Context){
     private var webView: DPPWebView? = null
     private var eventQueue: EventQueue = EventQueue.getInstance(context)
@@ -25,6 +26,11 @@ class EventEmitter(context: Context){
         }
     }
 
+	/**
+	 
+	 
+
+	 */
     fun flushQueue(){
         Lumber.log("Flushing queue to webview")
         val events = eventQueue.flush()
@@ -34,6 +40,7 @@ class EventEmitter(context: Context){
                 eventQueue.truncate(events.last().timestamp)
             }catch(e: NoSuchElementException){
                 //do nothing
+				Lumber.err(e.toString())
             }
         })
     }

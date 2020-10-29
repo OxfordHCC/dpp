@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: location.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: location.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+   @module location
+*/
+
+import db from './store.js';
+import { last } from './util';
+import L from 'leaflet';
+
+let lastPosition;
+let sharedCompressionWorker;
+let sharedIntersectionWorker;
+
+/**
+   Get last known position
+*/
+export async function getLastPosition(){
+	return lastPosition || (await db.location.limit(1).last());
+}
+
+function cacheLastPosition(pos){
+	lastPosition = pos;
+}
+
+function getCompressionWorker(){
+	if(!sharedCompressionWorker){
+		sharedCompressionWorker = new Worker(
+			'../workers/compression.worker.js',
+			{ type: 'module' }
+		);
+	}
+	return sharedCompressionWorker;
+}
+
+function getIntersectionWorker(){
+	if(!sharedIntersectionWorker){
+		sharedIntersectionWorker = new Worker(
+			'../workers/intersection.worker.js',
+			{ type: 'module' }
+		);
+	}
+	return sharedIntersectionWorker;
+}
+
+
+/**
+   Compress latlon points
+*/
+export function compressPoints(points){
+	if(!points || points.length === 0){ 
+		return []; 
+	}
+
+	return new Promise((resolve, reject) => {
+		let scWorker = getCompressionWorker();
+		let channel = new MessageChannel();
+		let port1 = channel.port1;
+		port1.onmessage = msg => {
+			if(msg.data.event === 'done'){
+				resolve(msg.data.entries);
+				port1.close();
+			}
+		}
+		port1.onerrormessage = msg => reject(msg);	
+		scWorker.postMessage({entries: points, port: channel.port2}, [channel.port2]);
+	});
+}
+
+
+function computeIntersections(entries, devices){
+	if(!entries || entries.length === 0 || !devices || devices.length === 0){ 
+		return [];
+	}
+
+	return new Promise((resolve, reject) => {
+		const intersectionWorker = getIntersectionWorker();
+		const channel = new MessageChannel();
+		const port1 = channel.port1;
+		const port2 = channel.port2;
+		port1.onmessage = msg => {
+			if(msg.data.event === "done"){
+				resolve(msg.data.entries);
+				port1.close();
+			}
+		}
+		intersectionWorker.onerror = err => reject(err);
+		intersectionWorker.postMessage({ entries, devices, port: port2 }, [port2]);
+	});
+}
+
+/**
+   Compress and store new location entries.
+   @return {Promise&lt;Array>} stored entries
+*/
+async function bulkPut(entries){
+	const lastPos = await getLastPosition();
+	if(lastPos){
+		entries = [lastPos, ...entries];
+	}
+	
+	const simplified = await compressPoints(entries);
+	await db.location.bulkPut(simplified);
+	await cacheLastPosition(last(simplified));
+	return simplified;
+}
+
+export const objToLonLat = ({ longitude, latitude }) => ([ longitude, latitude ]);
+export const objToLatLon = ({ longitude, latitude }) => ([ latitude, longitude ]);
+export const lonLatToObj = ([ longitude, latitude ]) => ({ longitude, latitude });
+export const LatLngToLatLon = ({lat, lng}) => ([lat, lng]);
+
+/**
+   @param {Number} startMs Start Unix timestamp in milliseconds
+   @param {Number} endMs End Unix timestamp in milliseconds
+   @return {Array&lt;Location>} array of location readings
+*/
+function getLocationHistory(startMs, endMs){
+	return db.location
+		.where('timestampMs')
+		.between(startMs, endMs)
+		.toArray();
+}
+
+/**
+   @param objArr
+   @param opts
+   @return {} bounds
+*/
+function getBoundsArray(objArr, opts){
+	if(!objArr || objArr.length === 0){
+		return undefined;
+		//throw "getBoundsArray(objArr), objArr falsy or length 0";
+	}
+	const latLon = objArr.map(objToLatLon);
+	let bounds = L.polyline(latLon).getBounds();
+	if(opts.pad){
+		bounds = bounds.pad(opts.pad);
+	}
+	if(opts.min){
+		const minBounds = bounds.getCenter().toBounds(opts.min);
+		bounds.extend(minBounds);
+	}
+	return [bounds.getSouthWest(), bounds.getNorthEast()];
+}
+
+export default {
+	computeIntersections,
+	getBoundsArray,
+	getLocationHistory,
+  	bulkPut,
+	deprecated_put,
+	getLastPosition
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-android%2520adapter.html">android adapter</a></li><li><a href="module-credentials.html">credentials</a></li><li><a href="module-devices.html">devices</a></li><li><a href="module-export.html">export</a></li><li><a href="module-geometry.html">geometry</a></li><li><a href="module-history.html">history</a></li><li><a href="module-location.html">location</a></li><li><a href="module-native.html">native</a></li><li><a href="module-native%2520interface.html">native interface</a></li><li><a href="module-openroute.html">openroute</a></li><li><a href="module-remote.html">remote</a></li><li><a href="module-util.html">util</a></li><li><a href="module-web%2520adapter.html">web adapter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Oct 28 2020 18:13:44 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

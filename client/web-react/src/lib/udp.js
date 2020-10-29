@@ -13,6 +13,8 @@ export const UDP_EXIT = "UDP_EXIT";
 
 //Turn events into intersections
 export function compileIntersections(events){
+
+	//turn enter-exit 
 	const pairToIntersection = ([start, end]) => ({
 		...((start.id && { id: start.id }) || {}),
 		startMs: new Date(start.timestamp).valueOf(),
@@ -28,9 +30,11 @@ export function compileIntersections(events){
 			type: (event.type === UDP_ENTER)? UDP_EXIT : UDP_ENTER
 		}
 	);
-	
+
+	//fold pair of intersections
 	const fold = (pairs) => pairs.map(pairToIntersection);
-	
+
+	//fill empty
 	const fill = (sequence) => {
 		const pattern = i => [UDP_ENTER, UDP_EXIT][i%2];
 		return Array(sequence.length*2)
@@ -61,7 +65,10 @@ export function compileIntersections(events){
 			});
 	}
 
+	//group by pManifest.uuid
 	const group = arr => Object.values(groupBy(x => x.data.pManifest.uuid)(arr))
+
+	
 	return flatten(group(events)
 				   .map(fill)
 				   .map(chunk(2))
@@ -86,7 +93,9 @@ export async function handleEvents(events){
 
 //on start, check whether we have any outdated events
 (async () => {
-	let current = (await intersection.getCurrent()).filter(inx => inx.detectionType === 'UDP');
+	let current = (await intersection.getCurrent())
+		.filter(inx => inx.detectionType === 'UDP');
+	
 	native.syncUDP(current);
 })()
 

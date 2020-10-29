@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: geometry.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: geometry.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+   @module geometry
+*/
+
+/**
+   @typedef {Object} LatLong
+   @property {Number} latitude
+   @property {Number} longitude
+*/
+/**
+   @typedef {Object} CartesianCircle
+   @property {Number} x - x coordinate
+   @property {Number} y - y coordinate
+   @property {Number} r - radius of circle
+*/
+/**
+   @typedef {Object} Point
+   @property {Number} x - x coordinate
+   @property {Number} y - y coordinate
+*/
+/**
+   @typedef {Object} Segment
+   @property {Point} A - One end of the segment
+   @property {Point} B - Other end of the segment
+*/
+
+/**
+* Get projection of point t on a line(a, b): a line that goes through
+* a and b
+*/
+export function pointProjectionOnLine(t, [a, b]){
+	//let s be the slope of line (a, b)
+	let s = (a.y - b.y) / (a.x - b.x);
+	//we get the basis(?) of the line, so we can compute the equation of the
+	//line later
+	let bS = a.y - s * a.x;
+
+	//let r be the slope of the line orthogonal to our line
+	let r = - 1 / s;
+	//since we know that point t is on this line, we can compute the basis of 
+	//this line
+	let bR = t.y - r * t.x;
+
+	//the point we're interested in is on both lines (at the intersection), 
+	//so it satisfies both line equations:
+	// 		y = s * x + bS;
+	//and 	y = r * x + bR;
+	//we replace y in the second equation to get x, then get y using x in the first eq.
+	let x = (bR - bS) / (s - r);
+	let y = s * x + bS;
+
+	return {x, y};
+}
+
+/**
+   Given two overlapping circles, get the middle point of their
+   intersection.  
+   @param {CartesianCircle} c1 - x,y coords and radius of circle 1
+   @param {CartesianCircle} c2 - x,y coords and radius of circle 2
+   @d - optional distance param to avoid computing again: somtimes
+   distance is calculated before this function is called.
+*/
+export function getMedianIntersection(c1, c2, d){
+	d = d || distanceCartesian(c1, c2);
+	let segment = getIntersectionSegment(c1, c2, d);
+	return {
+		x: (segment[0].x + segment[1].x)/2,
+		y: (segment[0].y + segment[1].y)/2
+	};
+}
+
+export function getIntersectionSegment(c1, c2, d){
+	const s = c1.r + c2.r - d;
+	const l = c1.r - s;
+	const k = c2.r - s; //TODO: why compute k?
+
+	// unit vector from c1 to c2
+	const uc1c2 = [(c2.x - c1.x) / d, (c2.y - c1.y) / d];
+
+	// invert unit vector (unit vector from c2 to c1)
+	const uc2c1 = uc1c2.map(c => -c); 
+
+	const a = {x: c1.x + l * uc1c2[0], y: c1.y + l * uc1c2[1]};
+	const b = {x: c2.x + l * uc2c1[0], y: c2.y + l * uc2c1[1]};
+	return [a, b];
+}
+
+
+/**
+   Convert latitude and longitutude to cartesian point
+   using equirectangular projection.
+ 
+   @see {@link https://en.wikipedia.org/wiki/Equirectangular_projection}
+   @todo Combine lat and long params into single {LatLong} param
+   @params {Number} lat
+   @params {Number} long
+   @returns {Point}
+*/
+export function latLongToCartesian(lat, long, lat0){
+	if(!lat0){
+		lat0 = lat;
+	}
+	const R = 6371e3; 
+	const longRad = long * (Math.PI/180);
+	const latRad = lat * (Math.PI/180);
+	const lat0Rad = lat0 * (Math.PI/180);
+	const x = R * longRad * Math.cos(lat0Rad);
+	const y = R * latRad;
+	return {x, y};
+}
+
+/**
+   Reverse of latLongToCartesian. Note that the same standard parallel
+   should be used when converting back to latlong
+   
+   @param {Point} x
+   @param {Point} y
+   @param {Number} lat0 - standard parallel
+*/
+export function cartesianToLatLong(x, y, lat0){
+	const R = 6371e3; 
+	const lat0Rad = lat0 * (Math.PI/180);
+	const longRad = x/(R*Math.cos(lat0Rad));
+	const latRad = y/R;
+	const latitude = latRad / (Math.PI/180);
+	const longitude = longRad / (Math.PI/180);
+	return {latitude, longitude};
+}
+
+/**
+   Euclidean distance
+   @param {Point} a 
+   @param {Point} b
+   @returns {Number} distance
+*/
+export function distanceCartesian(a, b){
+	let v = a.y - b.y;
+	let u = a.x - b.x;
+	return Math.sqrt(v * v + u * u);
+}
+
+//https://www.movable-type.co.uk/scripts/latlong.html
+export function distanceLatLongPythagora(a, b){
+	const R = 6371e3;
+	const x = (b.longitude - a.longitude) * Math.cos((a.latitude + b.latitude)/2);
+	const y = (b.latitude - a.latitude);
+	return Math.sqrt(x*x + y*y) * R;
+}
+
+//https://www.movable-type.co.uk/scripts/latlong.html
+export function distanceLatLongHaversine(A, B){
+	var R = 6371e3;
+	var φ1 = A.latitude * (Math.PI/180);
+	var φ2 = B.latitude * (Math.PI/180);
+	var Δφ = (B.latitude-A.latitude) * (Math.PI/180);
+	var Δλ = (B.longitude-A.longitude) * (Math.PI/180);
+
+	var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+			Math.cos(φ1) * Math.cos(φ2) *
+			Math.sin(Δλ/2) * Math.sin(Δλ/2);
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+	var d = R * c;
+	return d;
+}
+
+/**
+  Given point P on a line and a segment AB on the same line, is P
+  between segment bounds?
+  @param {Point} P 
+  @param {Segment} AB
+  @returns {Boolean}
+*/
+export function isPointBetween(P, [A, B]){
+	let dotProd = (A.x - P.x) * (A.x - B.x) + (A.y - P.y) * (B.y - A.y);
+	if(dotProd &lt; 0){
+		return false;
+	}
+
+	let abSquareDist = (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+	if(dotProd > abSquareDist){
+		return false;
+	}
+
+	return true;
+}
+
+/**
+   @param {CartesianCircle} C1
+   @param {Number} r1
+   @param {CartesianCircle} C2
+   @param {Number} r2
+   @returns {Boolean}
+*/
+export function isCircleIntersectingCircle(C1, r1 ,C2 , r2){
+	if(distanceCartesian(C1, C2) > r1 + r2){
+		return false;
+	}
+	return true;
+}
+
+/**
+   Given a circle with center at point C and radius r, and a segment [A, B]
+   @todo Combine C and r parameters into Circle
+   @param {Point} C
+   @param {Number} r
+   @param {Segment} AB
+   @returns {Boolean} 
+*/
+export function isSegmentIntersectingCircle(C, r, [A, B]){
+	//if any of the segment ends is inside circle, then it's intersecting
+	if(distanceCartesian(A, C) &lt; r){
+		return true;
+	}
+	if(distanceCartesian(B, C) &lt; r){
+		return true;
+	}
+	//let P = projection of C on (A,B)
+	let P = pointProjectionOnLine(C, [A, B]);
+	
+	//if radius is smaller than the distance between C and its projections, then
+	//the circle is too far away
+	let d = distanceCartesian(C, P);
+
+	if(isNaN(d)){
+		return false;
+	}
+
+	if(d > r){
+		return false;
+	}
+
+	//check if  P is between [A, B];
+	if(!isPointBetween(P, [A, B])){
+		return false;
+	}
+
+	return true;
+}
+
+/**
+   Given an array of paths and an array of circles, return their
+   intersections
+   @param {Segment[]} paths
+   @param {CartesianCircle[]} devices
+   @returns {Object[]} Array of objects describing intersections
+*/
+export function getIntersections(paths, devices){
+	let res = [];
+	for(let i = 0, n = paths.length; i &lt; n; i++){
+		for(let j = 0, m = devices.length; j &lt; m; j++){
+			if(isSegmentIntersectingCircle(devices[j], devices[j].r, paths[i])){
+                res.push({
+					device: devices[j],
+					path: paths[i],
+					pathIndex: i,
+					deviceIndex: j
+				})
+			}
+		}
+	}
+	return res;
+}
+
+const geometryHelper = {
+	getIntersections,
+	isSegmentIntersectingCircle,
+	isPointBetween,
+	distanceCartesian,
+	pointProjectionOnLine,
+	latLongToCartesian,
+	cartesianToLatLong,
+	isCircleIntersectingCircle
+}
+
+export default geometryHelper;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-android%2520adapter.html">android adapter</a></li><li><a href="module-credentials.html">credentials</a></li><li><a href="module-devices.html">devices</a></li><li><a href="module-export.html">export</a></li><li><a href="module-geometry.html">geometry</a></li><li><a href="module-history.html">history</a></li><li><a href="module-location.html">location</a></li><li><a href="module-native.html">native</a></li><li><a href="module-native%2520interface.html">native interface</a></li><li><a href="module-openroute.html">openroute</a></li><li><a href="module-remote.html">remote</a></li><li><a href="module-util.html">util</a></li><li><a href="module-web%2520adapter.html">web adapter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Oct 28 2020 18:13:44 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

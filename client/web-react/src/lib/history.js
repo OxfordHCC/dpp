@@ -1,8 +1,18 @@
+/**
+   @module history
+*/
+
 import intersection from './intersection';
 import openroute from './openroute';
 import device from './devices';
 import location from './location';
 
+/**
+   Return history between start and end time
+   @param {Number} fromMs
+   @param {Number} toMs
+   @return {Object}
+*/
 export async function get(fromMs, toMs){
 	const locations = await location.getLocationHistory(fromMs, toMs);
 	const openroutes = await openroute.estimatePath(locations);

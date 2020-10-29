@@ -1,3 +1,6 @@
+/**
+   @module native
+*/
 import AndroidInterface from "./native/android.js";
 import iOSInterface from "./native/ios.js";
 import WebInterface from './native/web.js';
